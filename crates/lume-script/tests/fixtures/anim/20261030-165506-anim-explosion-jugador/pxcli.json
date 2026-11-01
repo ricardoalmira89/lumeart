@@ -1,0 +1,45 @@
+{
+  "name": "explosion_jugador",
+  "cell": [
+    80,
+    80
+  ],
+  "origin": [
+    8,
+    8
+  ],
+  "colors": [],
+  "base": "de1b2c2948e88598",
+  "rest": "fc4fd32836b98518",
+  "actions": [
+    {
+      "name": "estallar",
+      "frames": 8,
+      "fps": 15,
+      "loop": false,
+      "line": 435,
+      "out_of_bounds": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "images": [
+        "d2bad2dcdf52c7c1",
+        "50eeef7702647861",
+        "1b29059cbed6a938",
+        "fc4fd32836b98518",
+        "d6d8c13cc96e85a4",
+        "c3e208eda2bb71a1",
+        "46dadf14a8170ae8",
+        "4065c23cc5384c64"
+      ]
+    }
+  ],
+  "issues": [],
+  "checked": []
+}

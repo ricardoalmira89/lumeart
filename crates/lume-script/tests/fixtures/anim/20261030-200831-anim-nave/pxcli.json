@@ -1,0 +1,37 @@
+{
+  "name": "nave",
+  "cell": [
+    72,
+    72
+  ],
+  "origin": [
+    4,
+    4
+  ],
+  "colors": [],
+  "base": "24f32b19f7354b56",
+  "rest": "6832ef7578604596",
+  "actions": [
+    {
+      "name": "marchas",
+      "frames": 4,
+      "fps": 4,
+      "loop": false,
+      "line": 1265,
+      "out_of_bounds": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "images": [
+        "6832ef7578604596",
+        "c80436fd813c5f23",
+        "e1b72d9f8bdb0154",
+        "80f2ebb307c390f3"
+      ]
+    }
+  ],
+  "issues": [],
+  "checked": []
+}

@@ -1,0 +1,16 @@
+{
+  "width": 1024,
+  "height": 1024,
+  "count": 0,
+  "issues": [
+    {
+      "level": "error",
+      "line": 1,
+      "msg": "Identifier 'ink' has already been declared"
+    }
+  ],
+  "svg_hash": "c3157a20e9bbe2ae",
+  "svg_len": 97,
+  "clean_hash": "c3157a20e9bbe2ae",
+  "clean_len": 97
+}

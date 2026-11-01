@@ -1,0 +1,64 @@
+[package]
+name = "lumeart"
+description = "LumeArt: studio de arte para videojuegos con agente de IA. Un solo ejecutable."
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+
+[[bin]]
+name = "lumeart"
+path = "src/main.rs"
+
+[dependencies]
+lume-domain.workspace = true
+lume-app.workspace = true
+lume-script.workspace = true
+lume-raster.workspace = true
+base64.workspace = true
+lume-store.workspace = true
+lume-agent.workspace = true
+lume-api.workspace = true
+lume-mcp.workspace = true
+lume-ui.workspace = true
+lume-cli.workspace = true
+clap.workspace = true
+directories.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+toml.workspace = true
+tokio.workspace = true
+
+# El paquete .deb (cargo deb, en .github/workflows/release.yml).
+[package.metadata.deb]
+name = "lumeart"
+maintainer = "Ricardo Almira"
+copyright = "2026 Ricardo Almira"
+license-file = ["../../LICENSE-MIT", "0"]
+extended-description = "Studio de arte para videojuegos con un agente de IA: pixel art, ilustración vectorial y animación, con exportación a PNG, hojas de sprites, GIF, SVG, PDF y Godot."
+section = "graphics"
+priority = "optional"
+depends = "$auto"
+assets = [
+    ["target/release/lumeart", "usr/bin/", "755"],
+    ["../../assets/linux/lumeart.desktop", "usr/share/applications/", "644"],
+    ["../../assets/brand/icon.svg", "usr/share/icons/hicolor/scalable/apps/lumeart.svg", "644"],
+    ["../../assets/brand/icon-128.png", "usr/share/icons/hicolor/128x128/apps/lumeart.png", "644"],
+    ["../../assets/brand/icon-256.png", "usr/share/icons/hicolor/256x256/apps/lumeart.png", "644"],
+    ["../../README.md", "usr/share/doc/lumeart/", "644"],
+]
+
+# El icono del .exe (assets/brand/icon.ico) se pone al compilar en Windows.
+[target.'cfg(windows)'.build-dependencies]
+winresource.workspace = true
+
+[dev-dependencies]
+eframe.workspace = true
+rmcp = { workspace = true, features = ["client", "transport-child-process"] }
+png.workspace = true
+serde_json.workspace = true
+tempfile.workspace = true
+zip.workspace = true
+
+[lints]
+workspace = true

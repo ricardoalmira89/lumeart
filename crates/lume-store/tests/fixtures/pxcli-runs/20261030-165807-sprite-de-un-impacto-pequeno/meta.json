@@ -1,0 +1,6 @@
+{
+  "id": "20261030-165807-sprite-de-un-impacto-pequeno",
+  "prompt": "Sprite de un impacto pequeño para un shooter espacial de scroll vertical: aparece cuando una bala cian del jugador golpea a un enemigo blindado sin destruirlo. Es el fotograma de MÁXIMA intensidad (luego se animará a partir de este dibujo). Vista desde arriba. Una chispa de choque en forma de estrella irregular de 6 a 8 puntas cortas y desiguales: centro blanco, puntas cian claro con algunas puntas amarillo pálido, y 3 o 4 chispitas sueltas de 1 o 2 píxeles alrededor. Sin contorno oscuro grueso: es luz. Colores saturados y forma legible a tamaño muy pequeño. Fondo transparente. Centrada, dejando 2 o 3 píxeles de margen.",
+  "width": 32,
+  "height": 32
+}

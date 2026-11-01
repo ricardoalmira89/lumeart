@@ -1,0 +1,64 @@
+{
+  "name": "sprite",
+  "cell": [
+    48,
+    48
+  ],
+  "origin": [
+    0,
+    0
+  ],
+  "colors": [
+    "#9c6b3c",
+    "#5a3a20"
+  ],
+  "base": "1884cb0214ccc70f",
+  "rest": "1884cb0214ccc70f",
+  "actions": [
+    {
+      "name": "anim",
+      "frames": 16,
+      "fps": 16,
+      "loop": true,
+      "line": 201,
+      "out_of_bounds": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "images": [
+        "1884cb0214ccc70f",
+        "751f2a01afd38416",
+        "f0c7054b572d6abf",
+        "fef141203629cd0a",
+        "e81c9fbc50039d97",
+        "025968c476f547e6",
+        "cdd0628cbb3a2957",
+        "6217e6023c6f38d6",
+        "48c0b997c0572baf",
+        "2a8864213dd1e592",
+        "38b46a3b45a9ffeb",
+        "d83885644fa3dc3f",
+        "63468a9648763556",
+        "27c1a8f768be8d7f",
+        "1884cb0214ccc70f",
+        "31f8206c02ded4aa"
+      ]
+    }
+  ],
+  "issues": [],
+  "checked": []
+}

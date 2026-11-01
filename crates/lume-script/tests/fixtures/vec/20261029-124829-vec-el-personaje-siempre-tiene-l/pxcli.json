@@ -1,0 +1,15 @@
+{
+  "width": 768,
+  "height": 1024,
+  "count": 0,
+  "issues": [
+    {
+      "level": "warning",
+      "msg": "el dibujo está vacío: todavía no hay ninguna forma"
+    }
+  ],
+  "svg_hash": "fc4e007807208cd4",
+  "svg_len": 95,
+  "clean_hash": "fc4e007807208cd4",
+  "clean_len": 95
+}

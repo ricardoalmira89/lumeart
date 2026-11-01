@@ -1,0 +1,45 @@
+{
+  "name": "rotura_roca",
+  "cell": [
+    72,
+    72
+  ],
+  "origin": [
+    4,
+    4
+  ],
+  "colors": [],
+  "base": "a5ba929f9de8d0fe",
+  "rest": "f7b4c588ad467e3e",
+  "actions": [
+    {
+      "name": "romper",
+      "frames": 8,
+      "fps": 15,
+      "loop": false,
+      "line": 433,
+      "out_of_bounds": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "images": [
+        "a3699c067a51fee4",
+        "26fa224f65a7d5fa",
+        "acb3f2e24849f162",
+        "f7b4c588ad467e3e",
+        "12dd7c430e8806e6",
+        "7ad919f6ac54a0eb",
+        "82c947fc9cb07da2",
+        "4e4214c700e921de"
+      ]
+    }
+  ],
+  "issues": [],
+  "checked": []
+}

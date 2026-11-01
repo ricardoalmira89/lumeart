@@ -1,0 +1,25 @@
+# dibujo de prueba
+fill_rect 0 0 4 4 red; set_pixel 1 1 "#00ff00"
+pxcli set_pixel 2 2 '#0000ff'
+./pxcli get_pixel 1 1
+set_pixel 9 9 red
+stop
+set_pixel x 1 red
+// comentario
+   line 0 0 3 3 blue   ;   ;
+nope 1 2
+undo
+get_pixel 3 3
+get_pixel 2 2
+export --scale 2 out.png
+export --scale=99 out.png
+export --scale 2
+batch 'x'
+clear transparent
+new 8 8
+get_pixel 0 0
+set_pixel 7 7 white
+undo
+redo
+redo
+get_pixel 7 7

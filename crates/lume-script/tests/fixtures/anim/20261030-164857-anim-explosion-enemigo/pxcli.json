@@ -1,0 +1,45 @@
+{
+  "name": "explosion_enemigo",
+  "cell": [
+    80,
+    80
+  ],
+  "origin": [
+    8,
+    8
+  ],
+  "colors": [],
+  "base": "16a073b77e8950cb",
+  "rest": "19c352a6c33d5ecb",
+  "actions": [
+    {
+      "name": "estallar",
+      "frames": 8,
+      "fps": 15,
+      "loop": false,
+      "line": 338,
+      "out_of_bounds": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "images": [
+        "3c9feeb40c7b5529",
+        "ee08c78ed312ee49",
+        "22ff10589be739ac",
+        "19c352a6c33d5ecb",
+        "5af89ec00acaf698",
+        "2e4924c01b4c3bdc",
+        "d30beb475745bf78",
+        "bf6aea11ed87e295"
+      ]
+    }
+  ],
+  "issues": [],
+  "checked": []
+}

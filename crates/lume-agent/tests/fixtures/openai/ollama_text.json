@@ -1,0 +1,9 @@
+{
+  "id": "chatcmpl-418",
+  "object": "chat.completion",
+  "created": 1793450040,
+  "model": "qwen2.5vl:7b",
+  "system_fingerprint": "fp_ollama",
+  "choices": [{"index": 0, "message": {"role": "assistant", "content": "Listo: un píxel rojo arriba a la izquierda."}, "finish_reason": "stop"}],
+  "usage": {"prompt_tokens": 520, "completion_tokens": 14, "total_tokens": 534}
+}

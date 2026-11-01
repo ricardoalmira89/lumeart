@@ -1,0 +1,8 @@
+# reloj
+fill_rect 2 0 8 1 #7a4a2a
+fill_rect 2 11 8 1 #7a4a2a
+fill_rect 3 1 6 10 #cfe8ff
+set_pixel 0 0 #ff0000
+fill_rect 0 0 1 1 transparent
+fill_rect 4 2 4 3 #e8c070
+line 6 5 6 9 #e8c070

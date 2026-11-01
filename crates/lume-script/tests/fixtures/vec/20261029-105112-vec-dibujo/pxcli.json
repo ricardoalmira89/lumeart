@@ -1,0 +1,16 @@
+{
+  "width": 720,
+  "height": 1280,
+  "count": 1073,
+  "issues": [
+    {
+      "level": "error",
+      "line": 127,
+      "msg": "trace: hace falta VectorCraft (vectorcraft-cli) instalado"
+    }
+  ],
+  "svg_hash": "d1af9c1daa391fde",
+  "svg_len": 196425,
+  "clean_hash": "e7a39247d3f5dfe6",
+  "clean_len": 186995
+}

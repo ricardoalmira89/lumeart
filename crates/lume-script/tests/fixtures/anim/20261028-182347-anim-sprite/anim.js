@@ -1,0 +1,128 @@
+// Animación "sprite" · celdas de 32x32 · la base empieza en (0, 0) dentro de cada celda.
+config({ name: "sprite", base: "base.png", cell: [32, 32], origin: [0, 0], colors: [] });
+
+// Torso y brazos (con su contorno).
+part("torso", () => {
+  fill_rect(8, 9, 17, 12, "#f5c518");
+  fill_rect(6, 9, 4, 5, "#f5c518");
+  fill_rect(7, 8, 19, 2, "#f5c518");
+  fill_rect(6, 14, 3, 6, "#d9a066");
+  fill_rect(24, 14, 3, 6, "#d9a066");
+  fill_rect(21, 9, 4, 11, "#c99a0a");
+  fill_rect(8, 18, 16, 3, "#c99a0a");
+  line(8, 9, 8, 16, "#ffe066");
+  fill_rect(23, 9, 4, 4, "#c99a0a");
+  line(6, 10, 8, 10, "#ffe066");
+  line(6, 13, 9, 13, "#c99a0a");
+  line(23, 13, 26, 13, "#a07a08");
+  line(6, 14, 6, 19, "#f0c08a");
+  line(26, 14, 26, 19, "#a8703f");
+  line(8, 14, 8, 18, "#a8703f");
+  fill_rect(25, 18, 2, 1, "#15141c");
+  line(11, 14, 20, 14, "#2a2018");
+  line(12, 15, 19, 15, "#2a2018");
+  line(11, 17, 20, 17, "#2a2018");
+  set_pixel(16, 15, "#f5c518");
+  line(7, 7, 11, 7, "#2a1e22");
+  line(21, 7, 25, 7, "#2a1e22");
+  set_pixel(6, 8, "#2a1e22");
+  set_pixel(26, 8, "#2a1e22");
+  line(5, 9, 5, 19, "#2a1e22");
+  line(27, 9, 27, 19, "#2a1e22");
+  line(6, 20, 7, 20, "#2a1e22");
+  line(25, 20, 26, 20, "#2a1e22");
+  set_pixel(13, 15, "#f5c518");
+});
+
+// Brillo del hombro, va encima del cuello.
+part("torso_luz", () => {
+  line(9, 8, 12, 8, "#ffe066");
+});
+
+// Cabeza con cuello.
+part("cabeza", () => {
+  fill_rect(13, 1, 7, 6, "#d9a066");
+  fill_rect(12, 2, 9, 4, "#d9a066");
+  fill_rect(12, 6, 9, 4, "#1e1a24");
+  fill_rect(13, 10, 7, 1, "#1e1a24");
+  fill_rect(14, 11, 5, 1, "#1e1a24");
+  fill_rect(13, 3, 3, 2, "#15141c");
+  fill_rect(17, 3, 3, 2, "#15141c");
+  line(12, 3, 20, 3, "#15141c");
+  set_pixel(14, 3, "#8090a0");
+  set_pixel(18, 3, "#8090a0");
+  set_pixel(16, 5, "#a8703f");
+  set_pixel(16, 4, "#d9a066");
+  fill_rect(15, 6, 3, 1, "#d9a066");
+  set_pixel(16, 7, "#6a3a3a");
+  line(14, 1, 16, 1, "#f0c08a");
+  set_pixel(13, 2, "#f0c08a");
+  set_pixel(20, 4, "#a8703f");
+  set_pixel(12, 4, "#d9a066");
+  line(13, 0, 19, 0, "#2a1e22");
+  set_pixel(12, 1, "#2a1e22");
+  set_pixel(20, 1, "#2a1e22");
+  line(11, 2, 11, 5, "#2a1e22");
+  line(21, 2, 21, 5, "#2a1e22");
+  set_pixel(11, 6, "#2a1e22");
+  set_pixel(21, 6, "#2a1e22");
+});
+
+part("pantalon", () => {
+  fill_rect(9, 20, 15, 6, "#3a3a42");
+  fill_rect(8, 21, 17, 4, "#3a3a42");
+  fill_rect(20, 20, 4, 6, "#26262e");
+  fill_rect(8, 21, 2, 4, "#50505a");
+  line(16, 22, 16, 25, "#26262e");
+  line(9, 20, 23, 20, "#26262e");
+  line(7, 21, 7, 24, "#2a1e22");
+  line(25, 21, 25, 24, "#2a1e22");
+  set_pixel(8, 25, "#2a1e22");
+  set_pixel(24, 25, "#2a1e22");
+});
+
+part("piernas", () => {
+  fill_rect(11, 26, 4, 3, "#d9a066");
+  fill_rect(18, 26, 4, 3, "#d9a066");
+  line(14, 26, 14, 28, "#a8703f");
+  line(21, 26, 21, 28, "#a8703f");
+  line(11, 26, 11, 28, "#f0c08a");
+  line(18, 26, 18, 28, "#f0c08a");
+  fill_rect(10, 29, 6, 2, "#1e2230");
+  fill_rect(17, 29, 6, 2, "#1e2230");
+  line(11, 29, 14, 29, "#d9a066");
+  line(18, 29, 21, 29, "#d9a066");
+  line(9, 26, 10, 26, "#2a1e22");
+  line(15, 26, 17, 26, "#2a1e22");
+  line(22, 26, 23, 26, "#2a1e22");
+  line(10, 27, 10, 28, "#2a1e22");
+  line(15, 27, 15, 28, "#2a1e22");
+  line(17, 27, 17, 28, "#2a1e22");
+  line(22, 27, 22, 28, "#2a1e22");
+  line(9, 29, 9, 30, "#2a1e22");
+  line(16, 29, 16, 30, "#2a1e22");
+  line(23, 29, 23, 30, "#2a1e22");
+  line(10, 31, 15, 31, "#2a1e22");
+  line(17, 31, 22, 31, "#2a1e22");
+});
+
+// Dibuja el personaje con el torso y la cabeza desplazados en vertical.
+part("cuerpo", ({ torso = 0, cabeza = 0 } = {}) => {
+  move(0, torso, () => draw("torso"));
+  move(0, cabeza, () => draw("cabeza"));
+  move(0, torso, () => draw("torso_luz"));
+  draw("pantalon");
+  draw("piernas");
+});
+
+// La pose de reposo tiene que ser idéntica al dibujo base (lo comprueba `pxcli anim check`).
+rest(() => {
+  draw("cuerpo");
+});
+
+// Respiración: al exhalar el torso baja 1 px y la cabeza lo sigue con un frame de retraso.
+action("idle", { frames: 8, fps: 8, loop: true }, (f, { t }) => {
+  const torso = [0, 0, 0, 1, 1, 1, 0, 0][f];
+  const cabeza = [0, 0, 0, 0, 1, 1, 1, 0][f];
+  draw("cuerpo", { torso, cabeza });
+});

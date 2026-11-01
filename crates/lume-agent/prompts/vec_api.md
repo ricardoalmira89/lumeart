@@ -1,0 +1,1 @@
+Dibujo vectorial: lee el código con `read_vec`, cámbialo con `write_vec` (el dibujo.js completo; cada llamada es un paso de deshacer y una versión, y devuelve los errores con su línea) y mira el resultado con `check_vec` (con crop para ampliar una zona y grid para ver las coordenadas).

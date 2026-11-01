@@ -1,0 +1,44 @@
+{
+  "name": "energia",
+  "cell": [
+    40,
+    40
+  ],
+  "origin": [
+    4,
+    4
+  ],
+  "colors": [
+    "#3f32073f",
+    "#f8ebc8f8"
+  ],
+  "base": "7b0dc69161b52d86",
+  "rest": "ebc06c6cc67df046",
+  "actions": [
+    {
+      "name": "brillo",
+      "frames": 6,
+      "fps": 10,
+      "loop": true,
+      "line": 688,
+      "out_of_bounds": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "images": [
+        "668e1e18f86a94cf",
+        "b8f5537f3196967c",
+        "e3472c19dec31b54",
+        "bb802ec5c7fcfbdb",
+        "3149fd5487f24ff5",
+        "77caba41df2b36f2"
+      ]
+    }
+  ],
+  "issues": [],
+  "checked": []
+}

@@ -1,0 +1,14 @@
+{
+  "id": "chatcmpl-B9MHRefusal0000000000000000",
+  "object": "chat.completion",
+  "created": 1793450020,
+  "model": "gpt-5-2025-08-07",
+  "choices": [
+    {
+      "index": 0,
+      "message": {"role": "assistant", "content": null, "refusal": "I can't help with that request.", "annotations": []},
+      "finish_reason": "stop"
+    }
+  ],
+  "usage": {"prompt_tokens": 300, "completion_tokens": 9, "total_tokens": 309}
+}

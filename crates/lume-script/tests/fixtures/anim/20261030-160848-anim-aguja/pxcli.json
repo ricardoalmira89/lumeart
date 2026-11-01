@@ -1,0 +1,60 @@
+{
+  "name": "aguja",
+  "cell": [
+    72,
+    72
+  ],
+  "origin": [
+    4,
+    4
+  ],
+  "colors": [],
+  "base": "a9c84f1fff3acca3",
+  "rest": "698b345495ef75a3",
+  "actions": [
+    {
+      "name": "propulsor",
+      "frames": 4,
+      "fps": 12,
+      "loop": true,
+      "line": 818,
+      "out_of_bounds": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "images": [
+        "698b345495ef75a3",
+        "2958965d8e2eb1c1",
+        "6a8ab10530bdb815",
+        "538fc5b3f6658859"
+      ]
+    },
+    {
+      "name": "aviso",
+      "frames": 6,
+      "fps": 12,
+      "loop": false,
+      "line": 822,
+      "out_of_bounds": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "images": [
+        "698b345495ef75a3",
+        "af55b974fe47a87b",
+        "964915f16af9aa7b",
+        "3cc831e00e2ab657",
+        "d6d1aec8b006fa93",
+        "7e0f4fee6bf475b8"
+      ]
+    }
+  ],
+  "issues": [],
+  "checked": []
+}

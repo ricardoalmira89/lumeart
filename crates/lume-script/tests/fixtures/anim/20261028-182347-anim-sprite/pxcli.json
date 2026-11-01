@@ -1,0 +1,45 @@
+{
+  "name": "sprite",
+  "cell": [
+    32,
+    32
+  ],
+  "origin": [
+    0,
+    0
+  ],
+  "colors": [],
+  "base": "dee2e6a0aaf11983",
+  "rest": "dee2e6a0aaf11983",
+  "actions": [
+    {
+      "name": "idle",
+      "frames": 8,
+      "fps": 8,
+      "loop": true,
+      "line": 124,
+      "out_of_bounds": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "images": [
+        "dee2e6a0aaf11983",
+        "dee2e6a0aaf11983",
+        "dee2e6a0aaf11983",
+        "5105718e25c572b3",
+        "bc1c4159048cffdc",
+        "bc1c4159048cffdc",
+        "1abb51e8b15fa1a0",
+        "dee2e6a0aaf11983"
+      ]
+    }
+  ],
+  "issues": [],
+  "checked": []
+}

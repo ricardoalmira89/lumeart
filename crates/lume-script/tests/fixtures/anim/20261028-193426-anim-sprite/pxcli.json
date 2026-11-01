@@ -1,0 +1,45 @@
+{
+  "name": "sprite",
+  "cell": [
+    32,
+    64
+  ],
+  "origin": [
+    0,
+    0
+  ],
+  "colors": [],
+  "base": "11565c90a47f9d0d",
+  "rest": "11565c90a47f9d0d",
+  "actions": [
+    {
+      "name": "anim",
+      "frames": 8,
+      "fps": 8,
+      "loop": true,
+      "line": 257,
+      "out_of_bounds": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "images": [
+        "11565c90a47f9d0d",
+        "74ede20302d823a1",
+        "0a8ee4dff11545db",
+        "770d1f51cfa51d19",
+        "b45b133eede6c3f8",
+        "8d376d9db77e9ab5",
+        "cd8725bb4090932f",
+        "11565c90a47f9d0d"
+      ]
+    }
+  ],
+  "issues": [],
+  "checked": []
+}

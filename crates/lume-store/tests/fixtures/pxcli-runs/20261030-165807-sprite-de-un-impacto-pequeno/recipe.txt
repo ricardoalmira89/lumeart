@@ -1,0 +1,54 @@
+line 16 16 16 4 #00c8ff
+line 15 15 15 9 #00c8ff
+line 17 15 17 10 #00c8ff
+line 16 16 25 8 #ffd84a
+line 17 16 23 10 #ffd84a
+line 16 15 21 10 #ffd84a
+line 16 16 28 17 #00c8ff
+line 17 15 24 15 #00c8ff
+line 17 17 23 17 #00c8ff
+line 16 16 23 24 #00c8ff
+line 17 16 21 20 #00c8ff
+line 16 16 15 28 #ffd84a
+line 15 17 15 23 #ffd84a
+line 17 17 16 22 #ffd84a
+line 16 16 6 23 #00c8ff
+line 15 16 9 20 #00c8ff
+line 15 18 10 21 #00c8ff
+line 16 16 3 14 #00c8ff
+line 15 15 8 14 #00c8ff
+line 15 17 9 16 #00c8ff
+line 16 16 9 9 #ffd84a
+line 15 16 11 12 #ffd84a
+line 16 15 16 7 #5ff4ff
+line 16 14 16 10 #c8ffff
+line 17 15 22 10 #fff6a0
+line 17 16 25 16 #5ff4ff
+line 17 16 21 16 #c8ffff
+line 17 17 21 21 #5ff4ff
+line 16 17 15 25 #fff6a0
+line 15 17 9 21 #5ff4ff
+line 15 16 6 15 #5ff4ff
+line 15 16 10 15 #c8ffff
+line 15 15 11 11 #fff6a0
+fill_rect 13 13 6 6 #5ff4ff
+set_pixel 13 13 transparent
+set_pixel 18 13 transparent
+set_pixel 13 18 transparent
+set_pixel 18 18 transparent
+fill_rect 14 14 4 4 #c8ffff
+fill_rect 15 14 2 4 #ffffff
+fill_rect 14 15 4 2 #ffffff
+set_pixel 16 4 #0a8cff
+set_pixel 3 14 #0a8cff
+set_pixel 28 17 #0a8cff
+set_pixel 24 4 #5ff4ff
+set_pixel 25 4 #00c8ff
+set_pixel 5 8 #fff6a0
+set_pixel 26 24 #5ff4ff
+set_pixel 9 27 #ffd84a
+set_pixel 9 26 #fff6a0
+line 15 24 15 28 #ffd84a
+line 15 23 15 25 #fff6a0
+set_pixel 16 13 #ffffff
+set_pixel 19 16 #c8ffff

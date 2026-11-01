@@ -1,0 +1,60 @@
+{
+  "name": "vigia",
+  "cell": [
+    72,
+    72
+  ],
+  "origin": [
+    4,
+    4
+  ],
+  "colors": [],
+  "base": "30f2a2d2e5a32f47",
+  "rest": "29664485e3fe5c47",
+  "actions": [
+    {
+      "name": "aviso",
+      "frames": 6,
+      "fps": 10,
+      "loop": false,
+      "line": 1457,
+      "out_of_bounds": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "images": [
+        "29664485e3fe5c47",
+        "a685023a0d0a5ac5",
+        "23cb39a66a8c2fd9",
+        "7578733d2db3a07e",
+        "ac42691d8c1694fb",
+        "b0ad8c9dd3492e20"
+      ]
+    },
+    {
+      "name": "disparo",
+      "frames": 4,
+      "fps": 12,
+      "loop": false,
+      "line": 1466,
+      "out_of_bounds": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "images": [
+        "d6f05916b99decdc",
+        "4ca5989443074e30",
+        "2a05650b6f8e89da",
+        "d6f05916b99decdc"
+      ]
+    }
+  ],
+  "issues": [],
+  "checked": []
+}

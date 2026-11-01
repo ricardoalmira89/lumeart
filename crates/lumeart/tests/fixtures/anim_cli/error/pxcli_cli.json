@@ -1,0 +1,88 @@
+{
+  "steps": [
+    {
+      "args": [
+        "check"
+      ],
+      "stdout": "Celda 8x8. Fila 1: a (2 frames, 8 fps, bucle). Fila 2: b (2 frames, 8 fps, bucle).\nERROR (línea 3, a f0): fill_rect: color no válido \"nocolor\"\nERROR (línea 3, a f1): fill_rect: color no válido \"nocolor\"\naviso (línea 2, a): el frame 0 está vacío\naviso (línea 2, a): el frame 1 está vacío\naviso (línea 2, a): no se mueve: todos los frames son iguales\n",
+      "error": "2 errores",
+      "files": {}
+    },
+    {
+      "args": [
+        "sheet",
+        "-o",
+        "revision.png",
+        "--scale",
+        "3"
+      ],
+      "stdout": "revision.png guardado.\nCelda 8x8. Fila 1: a (2 frames, 8 fps, bucle). Fila 2: b (2 frames, 8 fps, bucle).\nERROR (línea 3, a f0): fill_rect: color no válido \"nocolor\"\nERROR (línea 3, a f1): fill_rect: color no válido \"nocolor\"\naviso (línea 2, a): el frame 0 está vacío\naviso (línea 2, a): el frame 1 está vacío\naviso (línea 2, a): no se mueve: todos los frames son iguales\n",
+      "error": "2 errores",
+      "files": {
+        "revision.png": "png 54x54 62fffa4137d32f51"
+      }
+    },
+    {
+      "args": [
+        "frame",
+        "--action",
+        "b",
+        "--frame",
+        "1",
+        "-o",
+        "f.png",
+        "--scale",
+        "2"
+      ],
+      "stdout": "",
+      "error": "",
+      "files": {
+        "f.png": "png 16x16 31dd19c0c57aa815"
+      }
+    },
+    {
+      "args": [
+        "frame",
+        "--frame",
+        "99"
+      ],
+      "stdout": "",
+      "error": "a tiene 2 frames (0 a 1)",
+      "files": {}
+    },
+    {
+      "args": [
+        "frame",
+        "--action",
+        "nada"
+      ],
+      "stdout": "",
+      "error": "no existe la acción \"nada\"",
+      "files": {}
+    },
+    {
+      "args": [
+        "export",
+        "--scale",
+        "2",
+        "--strips"
+      ],
+      "stdout": "ERROR (línea 3, a f0): fill_rect: color no válido \"nocolor\"\nERROR (línea 3, a f1): fill_rect: color no válido \"nocolor\"\naviso (línea 2, a): el frame 0 está vacío\naviso (línea 2, a): el frame 1 está vacío\naviso (línea 2, a): no se mueve: todos los frames son iguales\n",
+      "error": "anim.js tiene errores: corrígelos o usa --force",
+      "files": {}
+    },
+    {
+      "args": [
+        "export",
+        "--force",
+        "-o",
+        "hoja.png"
+      ],
+      "stdout": "hoja.png\n",
+      "error": "",
+      "files": {
+        "hoja.png": "png 16x16 6297d811761f3c9d"
+      }
+    }
+  ]
+}

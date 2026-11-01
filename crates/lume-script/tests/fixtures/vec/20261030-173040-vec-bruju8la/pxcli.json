@@ -1,0 +1,16 @@
+{
+  "width": 1024,
+  "height": 1024,
+  "count": 2,
+  "issues": [
+    {
+      "level": "error",
+      "line": 35,
+      "msg": "freeform: hace falta VectorCraft (vectorcraft-cli) instalado"
+    }
+  ],
+  "svg_hash": "c13267e6846dae27",
+  "svg_len": 589,
+  "clean_hash": "447d99c9d082e726",
+  "clean_len": 563
+}

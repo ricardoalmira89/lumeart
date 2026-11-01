@@ -1,0 +1,30 @@
+[package]
+name = "lume-ui"
+description = "Adaptador: ventana nativa eframe/egui con el armazón del studio, modos, herramientas y tema."
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[dependencies]
+lume-app.workspace = true
+lume-domain.workspace = true
+eframe.workspace = true
+png.workspace = true
+image.workspace = true
+rfd.workspace = true
+serde_json.workspace = true
+tokio.workspace = true
+
+[dev-dependencies]
+egui_kittest.workspace = true
+# Solo en los tests: el agente real (ApiRunner, herramientas) con FakeProvider.
+lume-agent.workspace = true
+# Y el motor de anim.js de verdad, para el modo animación.
+lume-script.workspace = true
+# Y el rasterizador y el buscador de formas, para el modo vector.
+lume-raster.workspace = true
+serde_json.workspace = true
+tempfile.workspace = true
+
+[lints]
+workspace = true

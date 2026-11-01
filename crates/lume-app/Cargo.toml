@@ -1,0 +1,17 @@
+[package]
+name = "lume-app"
+description = "Capa de aplicación: Session, casos de uso, eventos y puertos (traits) que implementan los adaptadores."
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[dependencies]
+lume-domain.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+thiserror.workspace = true
+tokio.workspace = true
+tokio-util.workspace = true
+
+[lints]
+workspace = true

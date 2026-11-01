@@ -1,0 +1,37 @@
+{
+  "name": "impacto",
+  "cell": [
+    40,
+    40
+  ],
+  "origin": [
+    4,
+    4
+  ],
+  "colors": [],
+  "base": "35badcf8d2ee5bc7",
+  "rest": "e024b98f63f85f47",
+  "actions": [
+    {
+      "name": "chispa",
+      "frames": 4,
+      "fps": 20,
+      "loop": false,
+      "line": 90,
+      "out_of_bounds": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "images": [
+        "820821c64a35f8a5",
+        "e024b98f63f85f47",
+        "e6b81a0fd192cb3a",
+        "38c88bc37c6b1146"
+      ]
+    }
+  ],
+  "issues": [],
+  "checked": []
+}

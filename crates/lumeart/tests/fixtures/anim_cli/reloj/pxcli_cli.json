@@ -1,0 +1,93 @@
+{
+  "steps": [
+    {
+      "args": [
+        "check"
+      ],
+      "stdout": "Celda 12x12. Fila 1: reposo. Fila 2: caer (4 frames, 8 fps, bucle). Fila 3: salto (3 frames, 8 fps, una vez). Fila 4: espejo (2 frames, 8 fps, bucle).\naviso (línea 7, salto): 40 píxeles se salen de la celda (f1, f2): agranda la celda o recoloca el movimiento\naviso (línea 8, espejo): usa colores que no están en la base: #00ff00 (f0). Si son a propósito, decláralos en config({ colors: [...] })\n",
+      "error": "",
+      "files": {}
+    },
+    {
+      "args": [
+        "sheet",
+        "-o",
+        "revision.png",
+        "--scale",
+        "3"
+      ],
+      "stdout": "revision.png guardado.\nCelda 12x12. Fila 1: reposo. Fila 2: caer (4 frames, 8 fps, bucle). Fila 3: salto (3 frames, 8 fps, una vez). Fila 4: espejo (2 frames, 8 fps, bucle).\naviso (línea 7, salto): 40 píxeles se salen de la celda (f1, f2): agranda la celda o recoloca el movimiento\naviso (línea 8, espejo): usa colores que no están en la base: #00ff00 (f0). Si son a propósito, decláralos en config({ colors: [...] })\n",
+      "error": "",
+      "files": {
+        "revision.png": "png 154x154 20d0cc3f4a90c2fc"
+      }
+    },
+    {
+      "args": [
+        "frame",
+        "--action",
+        "caer",
+        "--frame",
+        "1",
+        "-o",
+        "f.png",
+        "--scale",
+        "2"
+      ],
+      "stdout": "",
+      "error": "",
+      "files": {
+        "f.png": "png 24x24 1787d405bf40a745"
+      }
+    },
+    {
+      "args": [
+        "frame",
+        "--frame",
+        "99"
+      ],
+      "stdout": "",
+      "error": "caer tiene 4 frames (0 a 3)",
+      "files": {}
+    },
+    {
+      "args": [
+        "frame",
+        "--action",
+        "nada"
+      ],
+      "stdout": "",
+      "error": "no existe la acción \"nada\"",
+      "files": {}
+    },
+    {
+      "args": [
+        "export",
+        "--scale",
+        "2",
+        "--strips"
+      ],
+      "stdout": "reloj-de-arena_24x24.png\nreloj-de-arena_caer_24x24.png\nreloj-de-arena_salto_24x24.png\nreloj-de-arena_espejo_24x24.png\n",
+      "error": "",
+      "files": {
+        "reloj-de-arena_24x24.png": "png 96x72 374cba4d50652285",
+        "reloj-de-arena_caer_24x24.png": "png 96x24 bf49039daa395fa5",
+        "reloj-de-arena_espejo_24x24.png": "png 48x24 d889649b1adf2805",
+        "reloj-de-arena_salto_24x24.png": "png 72x24 6d581faa6d125325"
+      }
+    },
+    {
+      "args": [
+        "export",
+        "--force",
+        "-o",
+        "hoja.png"
+      ],
+      "stdout": "hoja.png\n",
+      "error": "",
+      "files": {
+        "hoja.png": "png 48x36 dfe27d1cb434773d"
+      }
+    }
+  ]
+}

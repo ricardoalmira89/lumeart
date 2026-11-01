@@ -1,0 +1,23 @@
+[package]
+name = "lume-store"
+description = "Adaptador: formato .lume (ZIP), PNG, recientes, configuración y claves en el llavero del sistema."
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[dependencies]
+lume-app.workspace = true
+lume-domain.workspace = true
+gif.workspace = true
+keyring.workspace = true
+png.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+toml.workspace = true
+zip.workspace = true
+
+[dev-dependencies]
+tempfile.workspace = true
+
+[lints]
+workspace = true

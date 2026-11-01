@@ -1,0 +1,49 @@
+# --- Compilación ---
+/target
+**/*.rs.bk
+
+# --- Referencia local (el prototipo pxcli, ~110 MB): la copia
+#     scripts/setup-reference.sh ---
+/reference
+
+# --- Trabajo local del ralph loop (siguen en el disco, no en el repo) ---
+/PROMPT.md
+/ralph.sh
+/tasks.md
+/progress.md
+/ci/
+/logs
+
+# --- Agentes y editores ---
+/.claude/
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# --- Sistema ---
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# --- Secretos (las claves van al llavero del sistema, nunca a archivos) ---
+.env
+.env.*
+*.pem
+*.key
+
+# --- Godot (si se abre una exportación dentro del repo) ---
+.godot/
+
+# --- Registros y temporales ---
+*.log
+*.tmp
+/tmp/
+
+# --- Documentos para construir el proyecto (locales; ver el aviso de
+#     CLAUDE.md) ---
+/prd.md
+/docs/01-contexto-pxcli.md
+/docs/04-diseno-ui.md
+/docs/diseno/

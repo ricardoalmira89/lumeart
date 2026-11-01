@@ -1,0 +1,37 @@
+{
+  "name": "zumbon",
+  "cell": [
+    72,
+    72
+  ],
+  "origin": [
+    4,
+    4
+  ],
+  "colors": [],
+  "base": "e9afbe1ff6c04b44",
+  "rest": "064572577ba43484",
+  "actions": [
+    {
+      "name": "aleteo",
+      "frames": 4,
+      "fps": 15,
+      "loop": true,
+      "line": 1259,
+      "out_of_bounds": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "images": [
+        "e54217a62463e16b",
+        "9bb4b0056fb7c8e4",
+        "17cd9d7a1bb54da9",
+        "9bb4b0056fb7c8e4"
+      ]
+    }
+  ],
+  "issues": [],
+  "checked": []
+}

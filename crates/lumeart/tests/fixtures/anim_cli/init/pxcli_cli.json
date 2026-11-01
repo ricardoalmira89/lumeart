@@ -1,0 +1,186 @@
+{
+  "steps": [
+    {
+      "args": [
+        "init",
+        "--from",
+        "base.png",
+        "--recipe",
+        "recipe.txt",
+        "--cell",
+        "16x16",
+        "--action",
+        "caer:4:8",
+        "--action",
+        "salto:3:8:once",
+        "-o",
+        "anim/anim.js"
+      ],
+      "stdout": "anim/anim.js creado (receta con los 6 comandos originales que quedan visibles). Celda 16x16.\n",
+      "error": "",
+      "files": {
+        "anim/anim.js": "// Animación \"base\" · celdas de 16x16 · la base empieza en (2, 4) dentro de cada celda.\nconfig({ name: \"base\", base: \"base.png\", cell: [16, 16], origin: [2, 4], colors: [] });\n\n// Receta del dibujo base: los mismos comandos de pxcli que lo dibujaron, en orden.\n// Repártela en piezas con nombre para poder moverlas. El orden de dibujo hace de capas:\n// lo que se dibuja después queda encima.\npart(\"base\", () =\u003e {\n  fill_rect(2, 0, 8, 1, \"#7a4a2a\");\n  fill_rect(2, 11, 8, 1, \"#7a4a2a\");\n  fill_rect(3, 1, 6, 10, \"#cfe8ff\");\n  fill_rect(0, 0, 1, 1, \"transparent\");\n  fill_rect(4, 2, 4, 3, \"#e8c070\");\n  line(6, 5, 6, 9, \"#e8c070\");\n});\n\n// La pose de reposo tiene que ser idéntica al dibujo base (lo comprueba `pxcli anim check`).\nrest(() =\u003e {\n  draw(\"base\");\n});\n\n// Una función por acción: dibuja el frame f desde cero. t va de 0 a 1.\naction(\"caer\", { frames: 4, fps: 8, loop: true }, (f, { t }) =\u003e {\n  draw(\"base\");\n});\n\naction(\"salto\", { frames: 3, fps: 8, loop: false }, (f, { t }) =\u003e {\n  draw(\"base\");\n});\n\n",
+        "anim/base.png": "png 12x12 e5fb1983a94d67fd"
+      }
+    },
+    {
+      "args": [
+        "init",
+        "--from",
+        "base.png",
+        "-o",
+        "anim/anim.js"
+      ],
+      "stdout": "",
+      "error": "anim/anim.js ya existe (usa --force para sobrescribirlo)",
+      "files": {}
+    },
+    {
+      "args": [
+        "check",
+        "anim/anim.js"
+      ],
+      "stdout": "Celda 16x16. Fila 1: reposo. Fila 2: caer (4 frames, 8 fps, bucle). Fila 3: salto (3 frames, 8 fps, una vez).\naviso (línea 22, caer): no se mueve: todos los frames son iguales\naviso (línea 26, salto): no se mueve: todos los frames son iguales\n",
+      "error": "",
+      "files": {}
+    },
+    {
+      "args": [
+        "init",
+        "--from",
+        "base.png",
+        "--grow",
+        "4",
+        "--anchor",
+        "center",
+        "--force",
+        "--name",
+        "Reloj Grande",
+        "-o",
+        "anim/anim.js"
+      ],
+      "stdout": "anim/anim.js creado (receta reconstruida desde los píxeles, 10 comandos). Celda 16x16.\n",
+      "error": "",
+      "files": {
+        "anim/anim.js": "// Animación \"Reloj Grande\" · celdas de 16x16 · la base empieza en (2, 2) dentro de cada celda.\nconfig({ name: \"Reloj Grande\", base: \"base.png\", cell: [16, 16], origin: [2, 2], colors: [] });\n\n// Receta del dibujo base, reconstruida a partir de sus píxeles (rectángulos por color).\n// Repártela en piezas con nombre para poder moverlas. El orden de dibujo hace de capas:\n// lo que se dibuja después queda encima.\npart(\"base\", () =\u003e {\n  fill_rect(2, 0, 8, 1, \"#7a4a2a\");\n  fill_rect(3, 1, 6, 1, \"#cfe8ff\");\n  fill_rect(3, 2, 1, 9, \"#cfe8ff\");\n  fill_rect(4, 2, 4, 3, \"#e8c070\");\n  fill_rect(8, 2, 1, 9, \"#cfe8ff\");\n  fill_rect(4, 5, 2, 6, \"#cfe8ff\");\n  fill_rect(6, 5, 1, 5, \"#e8c070\");\n  fill_rect(7, 5, 1, 6, \"#cfe8ff\");\n  set_pixel(6, 10, \"#cfe8ff\");\n  fill_rect(2, 11, 8, 1, \"#7a4a2a\");\n});\n\n// La pose de reposo tiene que ser idéntica al dibujo base (lo comprueba `pxcli anim check`).\nrest(() =\u003e {\n  draw(\"base\");\n});\n\n// Una función por acción: dibuja el frame f desde cero. t va de 0 a 1.\naction(\"anim\", { frames: 8, fps: 8, loop: true }, (f, { t }) =\u003e {\n  draw(\"base\");\n});\n\n"
+      }
+    },
+    {
+      "args": [
+        "check",
+        "anim/anim.js"
+      ],
+      "stdout": "Celda 16x16. Fila 1: reposo. Fila 2: anim (8 frames, 8 fps, bucle).\naviso (línea 26, anim): no se mueve: todos los frames son iguales\n",
+      "error": "",
+      "files": {}
+    },
+    {
+      "args": [
+        "init",
+        "--from",
+        "alfa.png",
+        "--recipe",
+        "alfa.txt",
+        "-o",
+        "alfa/anim.js"
+      ],
+      "stdout": "alfa/anim.js creado (receta reconstruida desde los píxeles, 12 comandos). Celda 12x12.\n",
+      "error": "",
+      "files": {
+        "alfa/anim.js": "// Animación \"alfa\" · celdas de 12x12 · la base empieza en (0, 0) dentro de cada celda.\nconfig({ name: \"alfa\", base: \"base.png\", cell: [12, 12], origin: [0, 0], colors: [] });\n\n// Receta del dibujo base, reconstruida a partir de sus píxeles (rectángulos por color).\n// Repártela en piezas con nombre para poder moverlas. El orden de dibujo hace de capas:\n// lo que se dibuja después queda encima.\npart(\"base\", () =\u003e {\n  fill_rect(2, 0, 8, 1, \"#7a4a2a\");\n  fill_rect(3, 1, 6, 1, \"#cfe8ff\");\n  fill_rect(3, 2, 1, 9, \"#cfe8ff\");\n  fill_rect(4, 2, 4, 3, \"#e8c070\");\n  fill_rect(8, 2, 1, 9, \"#cfe8ff\");\n  set_pixel(4, 5, \"#68748080\");\n  fill_rect(5, 5, 1, 6, \"#cfe8ff\");\n  fill_rect(6, 5, 1, 5, \"#e8c070\");\n  fill_rect(7, 5, 1, 6, \"#cfe8ff\");\n  fill_rect(4, 6, 1, 5, \"#cfe8ff\");\n  set_pixel(6, 10, \"#cfe8ff\");\n  fill_rect(2, 11, 8, 1, \"#7a4a2a\");\n});\n\n// La pose de reposo tiene que ser idéntica al dibujo base (lo comprueba `pxcli anim check`).\nrest(() =\u003e {\n  draw(\"base\");\n});\n\n// Una función por acción: dibuja el frame f desde cero. t va de 0 a 1.\naction(\"anim\", { frames: 8, fps: 8, loop: true }, (f, { t }) =\u003e {\n  draw(\"base\");\n});\n\n",
+        "alfa/base.png": "png 12x12 26157abbea0269f9"
+      }
+    },
+    {
+      "args": [
+        "check",
+        "alfa/anim.js"
+      ],
+      "stdout": "Celda 12x12. Fila 1: reposo. Fila 2: anim (8 frames, 8 fps, bucle).\naviso (línea 28, anim): no se mueve: todos los frames son iguales\n",
+      "error": "",
+      "files": {}
+    },
+    {
+      "args": [
+        "export",
+        "alfa/anim.js",
+        "--scale",
+        "3"
+      ],
+      "stdout": "alfa/alfa_36x36.png\n",
+      "error": "",
+      "files": {
+        "alfa/alfa_36x36.png": "png 288x36 6a37af29badf53c5"
+      }
+    },
+    {
+      "args": [
+        "init",
+        "--from",
+        "base.png",
+        "--action",
+        ":3",
+        "-o",
+        "x.js"
+      ],
+      "stdout": "",
+      "error": "acción sin nombre en \":3\"",
+      "files": {}
+    },
+    {
+      "args": [
+        "init",
+        "--from",
+        "base.png",
+        "--action",
+        "a:x",
+        "-o",
+        "x.js"
+      ],
+      "stdout": "",
+      "error": "frames no válidos en \"a:x\"",
+      "files": {}
+    },
+    {
+      "args": [
+        "init",
+        "--from",
+        "base.png",
+        "--cell",
+        "4x4",
+        "-o",
+        "x.js"
+      ],
+      "stdout": "",
+      "error": "la celda (4x4) no puede ser más pequeña que la base (12x12)",
+      "files": {}
+    },
+    {
+      "args": [
+        "init"
+      ],
+      "stdout": "",
+      "error": "falta --from base.png",
+      "files": {}
+    },
+    {
+      "args": [
+        "init",
+        "--from",
+        "nada.png"
+      ],
+      "stdout": "",
+      "error": "no se puede leer la base: open nada.png: no such file or directory",
+      "files": {}
+    },
+    {
+      "args": [
+        "check",
+        "nada.js"
+      ],
+      "stdout": "",
+      "error": "open nada.js: no such file or directory",
+      "files": {}
+    }
+  ]
+}

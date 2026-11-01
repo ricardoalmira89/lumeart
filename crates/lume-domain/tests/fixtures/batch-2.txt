@@ -1,0 +1,7 @@
+clear #222
+fill_rect 1 1 2 2 #f80; set_pixel 0 0 white
+
+line 0 3 3 0 "cyan"
+get_pixel 3 0
+undo; redo
+get_pixel 1 1

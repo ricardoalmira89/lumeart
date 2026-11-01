@@ -1,0 +1,186 @@
+name: Release
+
+# Al subir un tag de versión (por ejemplo `git tag v0.1.0 && git push origin v0.1.0`)
+# se compila LumeArt para cada plataforma y se publica una Release de GitHub con
+# los paquetes.
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: Tag ya existente para (re)hacer su publicación
+        required: true
+
+permissions:
+  contents: write
+
+env:
+  CARGO_TERM_COLOR: always
+  TAG: ${{ inputs.tag || github.ref_name }}
+
+jobs:
+  linux:
+    name: Linux (.deb y .tar.gz)
+    # El runner más antiguo admitido, para que el binario funcione también con
+    # versiones de glibc más viejas.
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ env.TAG }}
+      - uses: dtolnay/rust-toolchain@stable
+      - name: Librerías del sistema
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y pkg-config libxkbcommon-dev libwayland-dev \
+            libxrandr-dev libxi-dev libgl1-mesa-dev libxcb-render0-dev \
+            libxcb-shape0-dev libxcb-xfixes0-dev
+      - uses: Swatinem/rust-cache@v2
+      - uses: taiki-e/install-action@v2
+        with:
+          tool: cargo-deb
+      - name: Compilar
+        run: cargo build --release --locked -p lumeart
+      - name: Empaquetar
+        run: |
+          set -euo pipefail
+          version="${TAG#v}"
+          mkdir -p dist
+          cargo deb -p lumeart --no-build --deb-version "$version" -o "dist/lumeart_${version}_amd64.deb"
+          name="lumeart-${version}-linux-x86_64"
+          mkdir -p "$name"
+          cp target/release/lumeart assets/linux/lumeart.desktop assets/brand/icon-256.png \
+            README.md LICENSE-MIT LICENSE-APACHE "$name/"
+          tar -czf "dist/$name.tar.gz" "$name"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: dist-linux
+          path: dist/*
+
+  windows:
+    name: Windows (.zip)
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ env.TAG }}
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+      - name: Compilar
+        run: cargo build --release --locked -p lumeart
+      - name: Empaquetar
+        shell: pwsh
+        run: |
+          $version = $env:TAG.TrimStart('v')
+          $name = "lumeart-$version-windows-x86_64"
+          New-Item -ItemType Directory -Force -Path $name, dist | Out-Null
+          Copy-Item target/release/lumeart.exe, README.md, LICENSE-MIT, LICENSE-APACHE $name
+          Compress-Archive -Path $name -DestinationPath "dist/$name.zip"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: dist-windows
+          path: dist/*
+
+  macos:
+    name: macOS ${{ matrix.arch }} (.app)
+    strategy:
+      matrix:
+        include:
+          - arch: aarch64
+            target: aarch64-apple-darwin
+          - arch: x86_64
+            target: x86_64-apple-darwin
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ env.TAG }}
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: ${{ matrix.target }}
+      - uses: Swatinem/rust-cache@v2
+        with:
+          key: ${{ matrix.target }}
+      - name: Compilar
+        run: cargo build --release --locked -p lumeart --target ${{ matrix.target }}
+      - name: Comprobar que solo enlaza librerías del sistema
+        run: |
+          otool -L "target/${{ matrix.target }}/release/lumeart"
+          if otool -L "target/${{ matrix.target }}/release/lumeart" | grep -E "/opt/homebrew|/usr/local/"; then
+            echo "::error::el ejecutable depende de librerías que los usuarios no tendrán"; exit 1
+          fi
+      - name: Empaquetar
+        run: |
+          set -euo pipefail
+          version="${TAG#v}"
+          app="LumeArt.app"
+          mkdir -p "$app/Contents/MacOS" "$app/Contents/Resources"
+          cp "target/${{ matrix.target }}/release/lumeart" "$app/Contents/MacOS/lumeart"
+          cp assets/brand/icon.icns "$app/Contents/Resources/lumeart.icns"
+          cat > "$app/Contents/Info.plist" <<PLIST
+          <?xml version="1.0" encoding="UTF-8"?>
+          <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+          <plist version="1.0">
+          <dict>
+            <key>CFBundleName</key><string>LumeArt</string>
+            <key>CFBundleDisplayName</key><string>LumeArt</string>
+            <key>CFBundleIdentifier</key><string>io.github.ricardoalmira89.lumeart</string>
+            <key>CFBundleExecutable</key><string>lumeart</string>
+            <key>CFBundleIconFile</key><string>lumeart</string>
+            <key>CFBundlePackageType</key><string>APPL</string>
+            <key>CFBundleShortVersionString</key><string>${version}</string>
+            <key>CFBundleVersion</key><string>${version}</string>
+            <key>LSMinimumSystemVersion</key><string>11.0</string>
+            <key>NSHighResolutionCapable</key><true/>
+          </dict>
+          </plist>
+          PLIST
+          # Firma ad hoc: hace falta para que se ejecute en Apple Silicon (la app
+          # no está notarizada).
+          codesign --force --deep --sign - "$app"
+          mkdir -p dist
+          ditto -c -k --keepParent "$app" "dist/lumeart-${version}-macos-${{ matrix.arch }}.zip"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: dist-macos-${{ matrix.arch }}
+          path: dist/*
+
+  publish:
+    name: Publicar la versión
+    needs: [linux, windows, macos]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: dist-*
+          path: dist
+          merge-multiple: true
+      - name: Sumas de comprobación
+        run: cd dist && sha256sum * > SHA256SUMS
+      - uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ env.TAG }}
+          name: LumeArt ${{ env.TAG }}
+          # Las versiones 0.x son alfa: se marcan como pre-release.
+          prerelease: ${{ startsWith(env.TAG, 'v0.') }}
+          generate_release_notes: true
+          files: dist/*
+          body: |
+            ## Descargas
+
+            | Sistema | Archivo |
+            |---|---|
+            | Windows 10/11 (x64) | `lumeart-*-windows-x86_64.zip`: descomprímelo y abre `lumeart.exe` |
+            | macOS, Apple Silicon | `lumeart-*-macos-aarch64.zip` |
+            | macOS, Intel | `lumeart-*-macos-x86_64.zip` |
+            | Debian / Ubuntu | `lumeart_*_amd64.deb`: `sudo apt install ./lumeart_*_amd64.deb` |
+            | Otros Linux | `lumeart-*-linux-x86_64.tar.gz` |
+
+            > **macOS:** la app aún no está notarizada. La primera vez, haz clic derecho en
+            > `LumeArt.app` → **Abrir**, o ejecuta `xattr -dr com.apple.quarantine LumeArt.app`.
+            >
+            > **Windows:** SmartScreen puede avisar de que la app no es conocida; elige
+            > **Más información → Ejecutar de todas formas**.
+
+            Comprueba las descargas con `SHA256SUMS`.

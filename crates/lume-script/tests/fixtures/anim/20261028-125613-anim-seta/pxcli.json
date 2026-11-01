@@ -1,0 +1,60 @@
+{
+  "name": "seta",
+  "cell": [
+    40,
+    40
+  ],
+  "origin": [
+    4,
+    8
+  ],
+  "colors": [],
+  "base": "adb897a3b35add64",
+  "rest": "d27ec261131e7d24",
+  "actions": [
+    {
+      "name": "rebote",
+      "frames": 6,
+      "fps": 8,
+      "loop": true,
+      "line": 94,
+      "out_of_bounds": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "images": [
+        "d3972e3056befc24",
+        "c88de64ae9fb9da4",
+        "2c1af4447a902e24",
+        "cc222e47459258a4",
+        "230004903032b824",
+        "d27ec261131e7d24"
+      ]
+    },
+    {
+      "name": "balanceo",
+      "frames": 4,
+      "fps": 6,
+      "loop": true,
+      "line": 108,
+      "out_of_bounds": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "images": [
+        "d27ec261131e7d24",
+        "b5a44b144071f07c",
+        "d27ec261131e7d24",
+        "dc8fd142a33932e8"
+      ]
+    }
+  ],
+  "issues": [],
+  "checked": []
+}

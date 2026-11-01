@@ -1,0 +1,86 @@
+{
+  "steps": [
+    {
+      "args": [
+        "check"
+      ],
+      "stdout": "Celda 8x8.\nERROR: anim.js no define ninguna acción: usa action(nombre, { frames, fps }, (f, { t }) =\u003e { ... })\n",
+      "error": "1 errores",
+      "files": {}
+    },
+    {
+      "args": [
+        "sheet",
+        "-o",
+        "revision.png",
+        "--scale",
+        "3"
+      ],
+      "stdout": "revision.png guardado.\nCelda 8x8.\nERROR: anim.js no define ninguna acción: usa action(nombre, { frames, fps }, (f, { t }) =\u003e { ... })\n",
+      "error": "1 errores",
+      "files": {
+        "revision.png": "png 28x28 aa6778ad7f8ffb25"
+      }
+    },
+    {
+      "args": [
+        "frame",
+        "--action",
+        "x",
+        "--frame",
+        "1",
+        "-o",
+        "f.png",
+        "--scale",
+        "2"
+      ],
+      "stdout": "",
+      "error": "no existe la acción \"x\"",
+      "files": {}
+    },
+    {
+      "args": [
+        "frame",
+        "--frame",
+        "99"
+      ],
+      "stdout": "",
+      "error": "no existe la acción \"\"",
+      "files": {}
+    },
+    {
+      "args": [
+        "frame",
+        "--action",
+        "nada"
+      ],
+      "stdout": "",
+      "error": "no existe la acción \"nada\"",
+      "files": {}
+    },
+    {
+      "args": [
+        "export",
+        "--scale",
+        "2",
+        "--strips"
+      ],
+      "stdout": "ERROR: anim.js no define ninguna acción: usa action(nombre, { frames, fps }, (f, { t }) =\u003e { ... })\n",
+      "error": "anim.js tiene errores: corrígelos o usa --force",
+      "files": {}
+    },
+    {
+      "args": [
+        "export",
+        "--force",
+        "-o",
+        "hoja.png"
+      ],
+      "stdout": "hoja.png\n",
+      "error": "",
+      "files": {
+        "hoja.png": "png 8x8 d80ac658736bb725"
+      }
+    }
+  ]
+}

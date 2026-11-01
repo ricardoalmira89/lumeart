@@ -1,0 +1,88 @@
+{
+  "steps": [
+    {
+      "args": [
+        "check"
+      ],
+      "stdout": "Celda 14x14. Fila 1: reposo. Fila 2: quieto (3 frames, 8 fps, bucle). Fila 3: salta (4 frames, 8 fps, bucle). Fila 4: vacio (2 frames, 4 fps, una vez). Fila 5: estado (3 frames, 8 fps, bucle). Fila 6: ovalo (2 frames, 8 fps, bucle).\naviso (línea 7, estado): el frame 2 cambia según el orden en que se dibujan los frames: no guardes estado entre frames\nERROR (reposo): la pose de reposo no coincide con la base en 1 píxeles (por ejemplo en 0,0: debería ser transparent y es #7a4a2a)\naviso (línea 4, quieto): no se mueve: todos los frames son iguales\naviso (línea 5, salta): el bucle da un salto al volver al principio: del último frame al primero cambian 144 píxeles y entre frames normalmente 49\naviso (línea 6, vacio): el frame 0 está vacío\naviso (línea 8, ovalo): no se mueve: todos los frames son iguales\n",
+      "error": "1 errores",
+      "files": {}
+    },
+    {
+      "args": [
+        "sheet",
+        "-o",
+        "revision.png",
+        "--scale",
+        "3"
+      ],
+      "stdout": "revision.png guardado.\nCelda 14x14. Fila 1: reposo. Fila 2: quieto (3 frames, 8 fps, bucle). Fila 3: salta (4 frames, 8 fps, bucle). Fila 4: vacio (2 frames, 4 fps, una vez). Fila 5: estado (3 frames, 8 fps, bucle). Fila 6: ovalo (2 frames, 8 fps, bucle).\naviso (línea 7, estado): el frame 2 cambia según el orden en que se dibujan los frames: no guardes estado entre frames\nERROR (reposo): la pose de reposo no coincide con la base en 1 píxeles (por ejemplo en 0,0: debería ser transparent y es #7a4a2a)\naviso (línea 4, quieto): no se mueve: todos los frames son iguales\naviso (línea 5, salta): el bucle da un salto al volver al principio: del último frame al primero cambian 144 píxeles y entre frames normalmente 49\naviso (línea 6, vacio): el frame 0 está vacío\naviso (línea 8, ovalo): no se mueve: todos los frames son iguales\n",
+      "error": "1 errores",
+      "files": {
+        "revision.png": "png 178x266 23f5c5610dfebed7"
+      }
+    },
+    {
+      "args": [
+        "frame",
+        "--action",
+        "quieto",
+        "--frame",
+        "1",
+        "-o",
+        "f.png",
+        "--scale",
+        "2"
+      ],
+      "stdout": "",
+      "error": "",
+      "files": {
+        "f.png": "png 28x28 710e0a2420e96ac5"
+      }
+    },
+    {
+      "args": [
+        "frame",
+        "--frame",
+        "99"
+      ],
+      "stdout": "",
+      "error": "quieto tiene 3 frames (0 a 2)",
+      "files": {}
+    },
+    {
+      "args": [
+        "frame",
+        "--action",
+        "nada"
+      ],
+      "stdout": "",
+      "error": "no existe la acción \"nada\"",
+      "files": {}
+    },
+    {
+      "args": [
+        "export",
+        "--scale",
+        "2",
+        "--strips"
+      ],
+      "stdout": "aviso (línea 7, estado): el frame 2 cambia según el orden en que se dibujan los frames: no guardes estado entre frames\nERROR (reposo): la pose de reposo no coincide con la base en 1 píxeles (por ejemplo en 0,0: debería ser transparent y es #7a4a2a)\naviso (línea 4, quieto): no se mueve: todos los frames son iguales\naviso (línea 5, salta): el bucle da un salto al volver al principio: del último frame al primero cambian 144 píxeles y entre frames normalmente 49\naviso (línea 6, vacio): el frame 0 está vacío\naviso (línea 8, ovalo): no se mueve: todos los frames son iguales\n",
+      "error": "anim.js tiene errores: corrígelos o usa --force",
+      "files": {}
+    },
+    {
+      "args": [
+        "export",
+        "--force",
+        "-o",
+        "hoja.png"
+      ],
+      "stdout": "hoja.png\n",
+      "error": "",
+      "files": {
+        "hoja.png": "png 56x70 a1f4df438ee9f177"
+      }
+    }
+  ]
+}

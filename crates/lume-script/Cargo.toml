@@ -1,0 +1,18 @@
+[package]
+name = "lume-script"
+description = "Adaptador: motor JavaScript embebido (rquickjs) para anim.js y dibujo.js, con sandbox y límites de tiempo."
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[dependencies]
+lume-app.workspace = true
+lume-domain.workspace = true
+rquickjs.workspace = true
+serde_json.workspace = true
+
+[dev-dependencies]
+lume-store.workspace = true
+
+[lints]
+workspace = true

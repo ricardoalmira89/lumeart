@@ -1,0 +1,5 @@
+line 5: get_pixel 3 0 -> ok #00ffffff
+line 7: get_pixel 1 1 -> ok #ff8800ff
+batch: 8 ok, 0 failed
+--- stderr ---
+--- exit 0 ---

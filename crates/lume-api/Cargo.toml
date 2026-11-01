@@ -1,0 +1,25 @@
+[package]
+name = "lume-api"
+description = "Adaptador: servidor HTTP local (axum) en 127.0.0.1 para la CLI y agentes externos."
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[dependencies]
+lume-app.workspace = true
+lume-domain.workspace = true
+axum.workspace = true
+directories.workspace = true
+getrandom.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+tokio.workspace = true
+tokio-stream.workspace = true
+
+[dev-dependencies]
+http-body-util.workspace = true
+tempfile.workspace = true
+tower.workspace = true
+
+[lints]
+workspace = true

@@ -1,0 +1,120 @@
+[workspace]
+resolver = "3"
+members = [
+    "crates/lume-domain",
+    "crates/lume-app",
+    "crates/lume-script",
+    "crates/lume-raster",
+    "crates/lume-store",
+    "crates/lume-agent",
+    "crates/lume-api",
+    "crates/lume-mcp",
+    "crates/lume-ui",
+    "crates/lume-cli",
+    "crates/lumeart",
+]
+
+[workspace.package]
+version = "0.1.0"
+edition = "2024"
+license = "MIT OR Apache-2.0"
+repository = "https://github.com/ricardoalmira89/lumeart"
+rust-version = "1.95"
+
+[workspace.dependencies]
+# Crates internos. Las reglas de qué puede depender de qué están en
+# docs/03-arquitectura.md y las comprueba crates/lumeart/tests/arquitectura.rs.
+lume-domain = { path = "crates/lume-domain" }
+lume-app = { path = "crates/lume-app" }
+lume-script = { path = "crates/lume-script" }
+lume-raster = { path = "crates/lume-raster" }
+lume-store = { path = "crates/lume-store" }
+lume-agent = { path = "crates/lume-agent" }
+lume-api = { path = "crates/lume-api" }
+lume-mcp = { path = "crates/lume-mcp" }
+lume-ui = { path = "crates/lume-ui" }
+lume-cli = { path = "crates/lume-cli" }
+
+# Dependencias externas: se añaden aquí cuando una tarea las necesita, y los
+# crates las usan con `nombre.workspace = true`, para que todas las versiones
+# vivan en un solo sitio.
+thiserror = "2"
+tokio = { version = "1", features = ["rt", "rt-multi-thread", "sync", "macros", "time", "net", "io-util", "signal"] }
+tokio-util = "0.7"
+axum = { version = "0.8", default-features = false, features = ["http1", "tokio", "query"] }
+tokio-stream = { version = "0.1", features = ["sync"] }
+getrandom = "0.3"
+directories = "6"
+png = "0.18"
+# Leer las imágenes que devuelve el agente (JPEG, WebP, GIF además de PNG).
+image = { version = "0.25", default-features = false, features = ["png", "jpeg", "webp", "gif"] }
+clap = { version = "4", features = ["derive"] }
+eframe = "0.37"
+# Diálogos de archivo nativos (portal XDG en Linux, sin GTK).
+rfd = "0.17"
+toml = "1"
+# GIF animado al exportar animaciones (Rust puro).
+gif = "0.14"
+# HTTP para los proveedores de modelos: rustls (ring) y raíces webpki, sin
+# OpenSSL ni certificados del sistema.
+reqwest = { version = "0.12", default-features = false, features = ["rustls-tls", "json"] }
+base64 = "0.22"
+# Procesos hijos con su grupo (Unix) o Job Object (Windows), para poder
+# matar `claude` y todo lo que lance.
+process-wrap = { version = "10", features = ["tokio1"] }
+# Llavero del sistema: Secret Service por D-Bus en Rust puro (zbus, sin
+# libdbus) en Linux; los nativos en Windows y macOS.
+keyring = { version = "3.6", features = ["apple-native", "windows-native", "async-secret-service", "async-io", "crypto-rust"] }
+# JavaScript embebido (QuickJS, enlazado estáticamente) para anim.js y
+# dibujo.js; sin cargador de módulos: los scripts no tocan el disco.
+rquickjs = "0.14"
+# SVG → imagen sin Chrome (Rust puro: usvg, tiny-skia, fontdb). Sin
+# `memmap-fonts`: las fuentes del sistema se leen, no se mapean en memoria.
+resvg = { version = "0.49", default-features = false, features = ["text", "system-fonts", "raster-images"] }
+# Calco de imágenes a trazos: el motor de vtracer (Rust puro; el crate
+# vtracer arrastra clap 2 e image 0.23 aunque solo se use como librería).
+visioncortex = "0.8"
+# SVG → PDF (exportar a .pdf y .ai) y el PDF con una capa por grupo.
+svg2pdf = "0.13"
+pdf-writer = "0.12"
+# Servidor MCP (`lumeart mcp`) por stdio, con herramientas tipadas.
+rmcp = { version = "3.8", features = ["transport-io"] }
+serde = { version = "1", features = ["derive"] }
+serde_json = { version = "1", features = ["float_roundtrip"] }
+# Solo deflate (Rust puro): sin bzip2, zstd ni lzma, que enlazan C.
+zip = { version = "2.4", default-features = false, features = ["deflate"] }
+# Solo al compilar en Windows: el icono y los datos del .exe.
+winresource = "0.1.34"
+
+# Solo para tests.
+proptest = "1"
+# Leer los PDF exportados para comprobarlos.
+lopdf = { version = "0.46", default-features = false }
+tempfile = "3"
+tower = { version = "0.5", features = ["util"] }
+http-body-util = "0.1"
+egui_kittest = { version = "0.37", features = ["snapshot", "wgpu", "eframe"] }
+
+[workspace.lints.rust]
+unsafe_code = "forbid"
+
+[workspace.lints.clippy]
+all = { level = "warn", priority = -1 }
+
+[profile.release]
+lto = "thin"
+codegen-units = 1
+strip = true
+
+# Rasterizar SVG en modo debug es muy lento: el rasterizador y sus
+# dependencias se optimizan también en dev (los tests recorren SVG grandes).
+[profile.dev.package.resvg]
+opt-level = 3
+[profile.dev.package.usvg]
+opt-level = 3
+[profile.dev.package.tiny-skia]
+opt-level = 3
+[profile.dev.package.tiny-skia-path]
+opt-level = 3
+[profile.dev.package.visioncortex]
+opt-level = 3

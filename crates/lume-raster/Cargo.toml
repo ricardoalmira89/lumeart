@@ -1,0 +1,23 @@
+[package]
+name = "lume-raster"
+description = "Adaptador: SVG a PNG con resvg (sustituye a Chrome headless), escalado, rejilla y recortes."
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[dependencies]
+lume-app.workspace = true
+lume-domain.workspace = true
+resvg.workspace = true
+visioncortex.workspace = true
+svg2pdf.workspace = true
+pdf-writer.workspace = true
+
+[dev-dependencies]
+png.workspace = true
+lume-script.workspace = true
+lopdf.workspace = true
+serde_json.workspace = true
+
+[lints]
+workspace = true

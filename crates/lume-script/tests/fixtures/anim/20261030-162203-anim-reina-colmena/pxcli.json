@@ -1,0 +1,63 @@
+{
+  "name": "reina_colmena",
+  "cell": [
+    208,
+    160
+  ],
+  "origin": [
+    8,
+    8
+  ],
+  "colors": [
+    "#ff8a95",
+    "#ffd6da"
+  ],
+  "base": "dd36ebd275595127",
+  "rest": "fabb206bd9a00527",
+  "actions": [
+    {
+      "name": "aleteo",
+      "frames": 4,
+      "fps": 12,
+      "loop": true,
+      "line": 9544,
+      "out_of_bounds": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "images": [
+        "fabb206bd9a00527",
+        "a3daf1c8828862fa",
+        "0a15aad75d26ed28",
+        "78d6884a3bd7dca9"
+      ]
+    },
+    {
+      "name": "nucleo",
+      "frames": 6,
+      "fps": 10,
+      "loop": false,
+      "line": 9558,
+      "out_of_bounds": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "images": [
+        "fabb206bd9a00527",
+        "5dd64a83aaf964e2",
+        "7b1972553dbc8ba8",
+        "935ca5acbbb41aa7",
+        "e0f216519a2318a0",
+        "f0cca4d04614d175"
+      ]
+    }
+  ],
+  "issues": [],
+  "checked": []
+}

@@ -1,0 +1,45 @@
+{
+  "name": "reloj1",
+  "cell": [
+    32,
+    32
+  ],
+  "origin": [
+    0,
+    0
+  ],
+  "colors": [],
+  "base": "3390641be402e46f",
+  "rest": "3390641be402e46f",
+  "actions": [
+    {
+      "name": "cayendo",
+      "frames": 8,
+      "fps": 8,
+      "loop": true,
+      "line": 193,
+      "out_of_bounds": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "images": [
+        "3fa98ec4eca8483f",
+        "9b34d5b9832830fd",
+        "a293ca16d110a983",
+        "2551b14228640b23",
+        "08d7b8c86c62e7df",
+        "f1c7a1280046c4dd",
+        "82a2bde17e4d5123",
+        "b0921be2534c0383"
+      ]
+    }
+  ],
+  "issues": [],
+  "checked": []
+}

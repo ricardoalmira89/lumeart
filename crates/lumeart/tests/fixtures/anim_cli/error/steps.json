@@ -1,0 +1,47 @@
+{
+ "steps": [
+  [
+   "check"
+  ],
+  [
+   "sheet",
+   "-o",
+   "revision.png",
+   "--scale",
+   "3"
+  ],
+  [
+   "frame",
+   "--action",
+   "b",
+   "--frame",
+   "1",
+   "-o",
+   "f.png",
+   "--scale",
+   "2"
+  ],
+  [
+   "frame",
+   "--frame",
+   "99"
+  ],
+  [
+   "frame",
+   "--action",
+   "nada"
+  ],
+  [
+   "export",
+   "--scale",
+   "2",
+   "--strips"
+  ],
+  [
+   "export",
+   "--force",
+   "-o",
+   "hoja.png"
+  ]
+ ]
+}

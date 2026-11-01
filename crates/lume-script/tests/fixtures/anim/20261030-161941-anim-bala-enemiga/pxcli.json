@@ -1,0 +1,42 @@
+{
+  "name": "bala_enemiga",
+  "cell": [
+    32,
+    32
+  ],
+  "origin": [
+    4,
+    4
+  ],
+  "colors": [
+    "#27031927",
+    "#30031f30",
+    "#37042437",
+    "#53053653"
+  ],
+  "base": "7d46b5bf81ae7db9",
+  "rest": "64e44a3ddce2b039",
+  "actions": [
+    {
+      "name": "pulso",
+      "frames": 4,
+      "fps": 12,
+      "loop": true,
+      "line": 559,
+      "out_of_bounds": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "images": [
+        "64e44a3ddce2b039",
+        "916db8832b80a11a",
+        "e63e78906a73f535",
+        "2b9c64f8a0bbf011"
+      ]
+    }
+  ],
+  "issues": [],
+  "checked": []
+}

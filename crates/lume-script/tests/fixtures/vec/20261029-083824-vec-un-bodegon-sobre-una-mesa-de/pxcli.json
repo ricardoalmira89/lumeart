@@ -1,0 +1,16 @@
+{
+  "width": 1024,
+  "height": 768,
+  "count": 602,
+  "issues": [
+    {
+      "level": "error",
+      "line": 265,
+      "msg": "revolve: hace falta VectorCraft (vectorcraft-cli) instalado"
+    }
+  ],
+  "svg_hash": "4ac8d0bde2b49c39",
+  "svg_len": 447276,
+  "clean_hash": "a0b03d40ff5cb7f1",
+  "clean_len": 452873
+}

@@ -1,0 +1,89 @@
+{
+  "steps": [
+    {
+      "args": [
+        "check"
+      ],
+      "stdout": "Celda 12x12. Fila 1: gira (1 frames, 2 fps, bucle).\naviso (reposo): falta rest(): sin pose de reposo no se puede comprobar que las piezas reproducen la base\n",
+      "error": "",
+      "files": {}
+    },
+    {
+      "args": [
+        "sheet",
+        "-o",
+        "revision.png",
+        "--scale",
+        "3"
+      ],
+      "stdout": "revision.png guardado.\nCelda 12x12. Fila 1: gira (1 frames, 2 fps, bucle).\naviso (reposo): falta rest(): sin pose de reposo no se puede comprobar que las piezas reproducen la base\n",
+      "error": "",
+      "files": {
+        "revision.png": "png 40x40 d2d3753d867730a9"
+      }
+    },
+    {
+      "args": [
+        "frame",
+        "--action",
+        "gira",
+        "--frame",
+        "1",
+        "-o",
+        "f.png",
+        "--scale",
+        "2"
+      ],
+      "stdout": "",
+      "error": "gira tiene 1 frames (0 a 0)",
+      "files": {}
+    },
+    {
+      "args": [
+        "frame",
+        "--frame",
+        "99"
+      ],
+      "stdout": "",
+      "error": "gira tiene 1 frames (0 a 0)",
+      "files": {}
+    },
+    {
+      "args": [
+        "frame",
+        "--action",
+        "nada"
+      ],
+      "stdout": "",
+      "error": "no existe la acción \"nada\"",
+      "files": {}
+    },
+    {
+      "args": [
+        "export",
+        "--scale",
+        "2",
+        "--strips"
+      ],
+      "stdout": "piedra_24x24.png\npiedra_gira_24x24.png\n",
+      "error": "",
+      "files": {
+        "piedra_24x24.png": "png 24x24 9a00c5fcd4b57ac5",
+        "piedra_gira_24x24.png": "png 24x24 9a00c5fcd4b57ac5"
+      }
+    },
+    {
+      "args": [
+        "export",
+        "--force",
+        "-o",
+        "hoja.png"
+      ],
+      "stdout": "hoja.png\n",
+      "error": "",
+      "files": {
+        "hoja.png": "png 12x12 e5fb1983a94d67fd"
+      }
+    }
+  ]
+}

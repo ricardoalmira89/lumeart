@@ -1,0 +1,60 @@
+{
+  "name": "sprite",
+  "cell": [
+    128,
+    128
+  ],
+  "origin": [
+    0,
+    0
+  ],
+  "colors": [],
+  "base": "a1f319d9c945810f",
+  "rest": "a1f319d9c945810f",
+  "actions": [
+    {
+      "name": "reposo",
+      "frames": 4,
+      "fps": 6,
+      "loop": true,
+      "line": 449,
+      "out_of_bounds": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "images": [
+        "00ac379c8522dc93",
+        "bacf1a592a9e0161",
+        "a04bd3bd8cac522f",
+        "205183d4edb68965"
+      ]
+    },
+    {
+      "name": "andar",
+      "frames": 6,
+      "fps": 10,
+      "loop": true,
+      "line": 466,
+      "out_of_bounds": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "images": [
+        "eeffa6384b0e5e3f",
+        "133e9091465eee33",
+        "52f278f2383f6cb7",
+        "eeffa6384b0e5e3f",
+        "28434901df4ec518",
+        "80e8361c790f32a4"
+      ]
+    }
+  ],
+  "issues": [],
+  "checked": []
+}

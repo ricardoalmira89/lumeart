@@ -1,0 +1,18 @@
+line 4: get_pixel 1 1 -> ok #00ff00ff
+line 5: set_pixel 9 9 red -> err out_of_bounds pixel (9,9) outside canvas
+line 6: stop -> err invalid_args stop is not allowed inside batch
+line 7: set_pixel x 1 red -> err invalid_args x must be an integer
+line 10: nope 1 2 -> err invalid_command unknown command "nope"
+line 12: get_pixel 3 3 -> ok #ff0000ff
+line 13: get_pixel 2 2 -> ok #0000ffff
+line 15: export /BATCHDIR/out.png 99 -> err invalid_args scale must be between 1 and 64
+line 16: export --scale 2 -> err invalid_args export needs a file name
+line 17: batch 'x' -> err invalid_args batch is not allowed inside batch
+line 19: new 8 8 -> ok 8x8
+line 20: get_pixel 0 0 -> ok #00000000
+line 24: redo -> err no_history nothing to redo
+line 25: get_pixel 7 7 -> ok #ffffffff
+batch: 16 ok, 8 failed
+--- stderr ---
+Error: err batch 8 of 24 commands failed
+--- exit 1 ---

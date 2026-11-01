@@ -1,0 +1,41 @@
+{
+  "name": "geoda",
+  "cell": [
+    72,
+    72
+  ],
+  "origin": [
+    4,
+    4
+  ],
+  "colors": [],
+  "base": "b9de39e6cd5c5806",
+  "rest": "110be59ae23d7dc6",
+  "actions": [
+    {
+      "name": "latido",
+      "frames": 6,
+      "fps": 8,
+      "loop": true,
+      "line": 1514,
+      "out_of_bounds": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "images": [
+        "110be59ae23d7dc6",
+        "8e9b50b8682dcb27",
+        "b87ae4e637dfe3fd",
+        "8e9b50b8682dcb27",
+        "110be59ae23d7dc6",
+        "110be59ae23d7dc6"
+      ]
+    }
+  ],
+  "issues": [],
+  "checked": []
+}

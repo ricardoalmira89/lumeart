@@ -1,0 +1,142 @@
+[
+  {
+    "id": "seta",
+    "prompt": "una seta roja con puntos blancos y tallo crema, estilo RPG de 16 bits",
+    "width": 32,
+    "height": 32,
+    "origin": "20261028-115947-una-seta-roja-con-puntos-bla"
+  },
+  {
+    "id": "brujula",
+    "prompt": "una brújula de bolsillo de latón con la corona y la anilla arriba; esfera color crema con marcas de rumbo y una rosa de los vientos",
+    "width": 32,
+    "height": 32,
+    "origin": "20261028-120217-dibujo"
+  },
+  {
+    "id": "cactus",
+    "prompt": "un cactus verde con forma de candelabro, con un brazo a cada lado y una flor rosa de centro amarillo arriba, en una maceta de barro",
+    "width": 32,
+    "height": 32,
+    "origin": "20261028-120332-dibujo"
+  },
+  {
+    "id": "lupa",
+    "prompt": "una lupa con el aro dorado, el cristal azul claro con un reflejo y el mango de madera en diagonal, sobre fondo transparente",
+    "width": 32,
+    "height": 32,
+    "origin": "20261028-121155-dibujo"
+  },
+  {
+    "id": "reloj_arena",
+    "prompt": "un reloj de arena con estructura de bronce, tapa y base anchas, dos columnas laterales y la arena cayendo en un hilo fino",
+    "width": 32,
+    "height": 32,
+    "origin": "20261028-121641-dibujo"
+  },
+  {
+    "id": "pocion",
+    "prompt": "un frasco de poción de vidrio con tapón de corcho y adornos de metal, lleno de un líquido verde con brillos",
+    "width": 32,
+    "height": 32,
+    "origin": "20261028-121758-dibujo"
+  },
+  {
+    "id": "guitarrista",
+    "prompt": "un guitarrista con barba, de perfil en tres cuartos, con auriculares grandes y chaqueta de cuero oscura, sentado tocando una guitarra eléctrica",
+    "width": 128,
+    "height": 128,
+    "origin": "20261028-124905-dibujo"
+  },
+  {
+    "id": "nino_gafas",
+    "prompt": "retrato de un niño sonriente con el pelo corto castaño claro, gafas de sol enormes de montura granate y camiseta de tirantes azul marino",
+    "width": 32,
+    "height": 32,
+    "origin": "20261028-125200-dibujo"
+  },
+  {
+    "id": "telescopio",
+    "prompt": "un telescopio antiguo de latón con el tubo azul oscuro sobre un trípode de madera",
+    "width": 32,
+    "height": 32,
+    "origin": "20261028-125351-dibujo"
+  },
+  {
+    "id": "reloj_lleno",
+    "prompt": "un reloj de arena de madera con columnas torneadas y toda la arena en el compartimento de arriba, como si acabara de girarse",
+    "width": 32,
+    "height": 32,
+    "origin": "20261028-125955-dibuja-ese-reloj-de-arena-pe"
+  },
+  {
+    "id": "perforadora",
+    "prompt": "una máquina perforadora industrial: columna central gris con una broca en espiral que se hunde en un agujero, cuatro patas articuladas y una base cuadrada",
+    "width": 48,
+    "height": 48,
+    "origin": "20261028-182841-dibujo"
+  },
+  {
+    "id": "templario",
+    "prompt": "un caballero templario con yelmo cerrado, manto y sobreveste blancos con la cruz roja en el pecho, sosteniendo una espada",
+    "width": 48,
+    "height": 48,
+    "origin": "20261028-191225-dibujo"
+  },
+  {
+    "id": "esqueleto",
+    "prompt": "un esqueleto guerrero con la calavera girada a la derecha, una hombrera oscura, taparrabos rasgado y una espada, sobre fondo transparente",
+    "width": 32,
+    "height": 64,
+    "origin": "20261028-193031-dibujo"
+  },
+  {
+    "id": "chica",
+    "prompt": "una chica de melena castaña arrodillada e inclinada hacia delante, mirando hacia arriba, con camiseta de tirantes morada y botas",
+    "width": 32,
+    "height": 64,
+    "origin": "20261028-193723-dibujo"
+  },
+  {
+    "id": "criatura",
+    "prompt": "una criatura de madera: humanoide de tronco claro con una gran melena de hojas verdes alrededor de la cabeza y una falda de corteza",
+    "width": 32,
+    "height": 64,
+    "origin": "20261028-194824-dibujo"
+  },
+  {
+    "id": "explosion",
+    "prompt": "Sprite de una explosión para un shooter espacial de scroll vertical, cuando muere un enemigo. Es el fotograma de MÁXIMA intensidad de la explosión (luego se animará entera a partir de este dibujo). Vista desde arriba. Una bola de fuego redondeada de bordes irregulares: núcleo blanco brillante, alrededor amarillo, luego naranja y por fuera rojo anaranjado, con 3 o 4 bocanadas de humo violeta oscuro asomando por los bordes y 5 o 6 chispas amarillas sueltas saliendo hacia fuera en distintas direcciones. Estilo pegatina de juego: colores saturados, formas grandes y legibles a tamaño pequeño, contorno de 1 píxel rojo muy oscuro (no negro) alrededor de la bola de fuego. Fondo transparente. Centrada, dejando unos 6 píxeles de margen alrededor.",
+    "width": 64,
+    "height": 64,
+    "origin": "20261030-164459-sprite-de-una-explosion-para"
+  },
+  {
+    "id": "explosion_nave",
+    "prompt": "Sprite de la explosión de la nave del jugador en un shooter espacial de scroll vertical. La nave del jugador es blanca con alas azul verdoso y cabina cian, así que su explosión tiene que ser FRÍA y distinta de la de los enemigos (que es naranja): es el fotograma de MÁXIMA intensidad (luego se animará entera a partir de este dibujo). Vista desde arriba. Una onda de energía redondeada de bordes irregulares: núcleo blanco brillante, alrededor cian claro, luego azul verdoso y por fuera azul intenso, con un anillo fino de choque cian claro algo separado alrededor, 3 o 4 fragmentos pequeños del casco blanco y azul verdoso saliendo despedidos y 5 o 6 chispas blancas sueltas. Estilo pegatina de juego: colores saturados, formas grandes y legibles a tamaño pequeño, contorno de 1 píxel azul marino muy oscuro (no negro) alrededor de la onda. Fondo transparente. Centrada, dejando unos 4 píxeles de margen alrededor.",
+    "width": 64,
+    "height": 64,
+    "origin": "20261030-165112-sprite-de-la-explosion-de-la"
+  },
+  {
+    "id": "impacto",
+    "prompt": "Sprite de un impacto pequeño para un shooter espacial de scroll vertical: aparece cuando una bala cian del jugador golpea a un enemigo blindado sin destruirlo. Es el fotograma de MÁXIMA intensidad (luego se animará a partir de este dibujo). Vista desde arriba. Una chispa de choque en forma de estrella irregular de 6 a 8 puntas cortas y desiguales: centro blanco, puntas cian claro con algunas puntas amarillo pálido, y 3 o 4 chispitas sueltas de 1 o 2 píxeles alrededor. Sin contorno oscuro grueso: es luz. Colores saturados y forma legible a tamaño muy pequeño. Fondo transparente. Centrada, dejando 2 o 3 píxeles de margen.",
+    "width": 32,
+    "height": 32,
+    "origin": "20261030-165807-sprite-de-un-impacto-pequeno"
+  },
+  {
+    "id": "pulso",
+    "prompt": "Sprite de la onda del PULSO de la nave del jugador en un shooter espacial vertical: una onda expansiva de energía que barre las balas enemigas cercanas. Es el fotograma de MÁXIMA expansión (luego se animará creciendo desde el centro). Vista desde arriba. Un anillo circular grande y limpio que ocupa casi todo el lienzo: borde exterior grueso de 3 o 4 píxeles en cian brillante con el filo blanco, por dentro un segundo anillo fino de cian claro, y entre ellos un velo azul muy suave y transparente; en el anillo exterior, 8 destellos blancos pequeños en forma de rombo repartidos como las horas de un reloj. El centro queda vacío y transparente (ahí está la nave). Debe parecer energía que sale de la nave, NO una explosión: nada de fuego, humo ni fragmentos. Colores fríos y saturados, sin contorno oscuro. Fondo transparente. Centrado, dejando 1 o 2 píxeles de margen.",
+    "width": 96,
+    "height": 96,
+    "origin": "20261030-180444-sprite-de-la-onda-del-pulso"
+  },
+  {
+    "id": "asteroide",
+    "prompt": "Sprite de la rotura de un asteroide en un shooter espacial vertical: el momento en que una roca marrón grisácea cálida (con cráteres y contorno oscuro, estilo pegatina) estalla en pedazos por un disparo. Es el fotograma de MÁXIMA intensidad (luego se animará entero a partir de este dibujo). Vista desde arriba. En el centro, un destello breve blanco y amarillo pálido pequeño; alrededor, 7 u 8 fragmentos de roca angulosos de distintos tamaños (marrón grisáceo con la cara iluminada más clara arriba a la izquierda y contorno de 1 píxel marrón muy oscuro) saliendo despedidos hacia fuera en todas direcciones, y una nube de polvo gris parduzco suave entre ellos. Nada de fuego naranja ni humo violeta: es una roca que se rompe, no una explosión de nave. Formas grandes y legibles a tamaño pequeño. Fondo transparente. Centrado, dejando unos 4 píxeles de margen.",
+    "width": 64,
+    "height": 64,
+    "origin": "20261030-182329-sprite-de-la-rotura-de-un-as"
+  }
+]

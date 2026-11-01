@@ -1,0 +1,24 @@
+[package]
+name = "lume-agent"
+description = "Adaptador: agente (Claude Code, Anthropic, OpenAI, local), herramientas y bucle de refinado (RefineLoop)."
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[dependencies]
+lume-app.workspace = true
+lume-domain.workspace = true
+base64.workspace = true
+process-wrap.workspace = true
+reqwest.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+tokio.workspace = true
+
+[dev-dependencies]
+# El motor de anim.js de verdad, para las herramientas de animación.
+lume-script.workspace = true
+tempfile.workspace = true
+
+[lints]
+workspace = true
