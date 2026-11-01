@@ -1203,7 +1203,13 @@ fn user_bubble(ui: &mut egui::Ui, text: &str, attachments: &[String]) {
             .inner_margin(Margin::symmetric(12, 10))
             .show(ui, |ui| {
                 ui.set_max_width(290.0);
-                ui.add(egui::Label::new(RichText::new(text).size(13.0).color(theme::TEXT)).wrap());
+                // La burbuja va a la derecha, pero su texto se alinea a la
+                // izquierda: sin `halign`, cada línea heredaría la derecha.
+                ui.add(
+                    egui::Label::new(RichText::new(text).size(13.0).color(theme::TEXT))
+                        .wrap()
+                        .halign(Align::Min),
+                );
             });
         for name in attachments {
             egui::Frame::NONE

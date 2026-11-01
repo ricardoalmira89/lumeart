@@ -139,7 +139,14 @@ async fn batch_returns_the_same_lines_as_pxcli() {
     )
     .await;
     assert_eq!(status, StatusCode::OK);
-    assert_eq!(String::from_utf8(body).unwrap(), stdout);
+    // La salida de pxcli se capturó en Linux; en Windows las rutas llevan `\`.
+    let body = String::from_utf8(body).unwrap();
+    let body = if cfg!(windows) {
+        body.replace('\\', "/")
+    } else {
+        body
+    };
+    assert_eq!(body, stdout);
     assert_eq!(headers[FAILED_HEADER], "8");
     // El export relativo se resolvió en la carpeta del cliente.
     assert_eq!(

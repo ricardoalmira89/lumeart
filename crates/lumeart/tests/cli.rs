@@ -213,7 +213,13 @@ async fn batch_prints_like_pxcli() {
     let (stderr, _) = rest.split_once("--- exit ").unwrap();
     // Por la entrada estándar, desde la carpeta /BATCHDIR (como el script de captura).
     let out = lumeart(&["batch"], Path::new("/BATCHDIR"), None, s, script).await;
-    assert_eq!(out.stdout, stdout);
+    // La salida de pxcli se capturó en Linux; en Windows las rutas llevan `\`.
+    let printed = if cfg!(windows) {
+        out.stdout.replace('\\', "/")
+    } else {
+        out.stdout.clone()
+    };
+    assert_eq!(printed, stdout);
     assert_eq!(out.stderr, stderr);
     assert_eq!(out.code, 1);
 

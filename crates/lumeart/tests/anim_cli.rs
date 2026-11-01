@@ -96,8 +96,15 @@ fn anim_commands_behave_like_pxcli() {
                 .output()
                 .unwrap();
             let what = format!("{name}: anim {}", args.join(" "));
+            // La salida de pxcli se capturó en Linux; en Windows las rutas
+            // llevan `\`.
             let stdout = String::from_utf8_lossy(&out.stdout);
             let stderr = String::from_utf8_lossy(&out.stderr);
+            let (stdout, stderr) = if cfg!(windows) {
+                (stdout.replace('\\', "/"), stderr.replace('\\', "/"))
+            } else {
+                (stdout.into_owned(), stderr.into_owned())
+            };
             assert_eq!(stdout, step["stdout"].as_str().unwrap(), "{what}: salida");
             let error = step["error"].as_str().unwrap();
             if error.is_empty() {
