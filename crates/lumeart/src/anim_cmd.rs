@@ -322,7 +322,11 @@ mod tests {
         assert_eq!(go_dir("anim.js"), ".");
         assert_eq!(go_dir("anim/anim.js"), "anim");
         assert_eq!(go_join(".", "base.png"), "base.png");
-        assert_eq!(go_join("anim", "base.png"), "anim/base.png");
+        // Como filepath.Join de Go: con el separador del sistema.
+        assert_eq!(
+            go_join("anim", "base.png"),
+            format!("anim{}base.png", std::path::MAIN_SEPARATOR)
+        );
         assert_eq!(go_base("a/b/c.png"), "c.png");
         assert_eq!(stem("anim/anim.js"), "anim");
     }

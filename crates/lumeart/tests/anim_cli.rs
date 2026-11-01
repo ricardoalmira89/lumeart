@@ -40,11 +40,12 @@ fn snapshot(dir: &Path) -> BTreeMap<String, String> {
             if path.is_dir() {
                 stack.push(path);
             } else {
+                // Con «/» en todos los sistemas.
                 let rel = path
                     .strip_prefix(dir)
                     .unwrap()
                     .to_string_lossy()
-                    .into_owned();
+                    .replace('\\', "/");
                 out.insert(rel, signature(&path));
             }
         }

@@ -257,9 +257,12 @@ fn a_run_shows_up_step_by_step() {
     gate.add_permits(1);
     let end =
         "Terminado en la vuelta 1: el agente lo da por bueno y pasan todas las comprobaciones.";
-    wait_until(&mut h, "el final", |h| has(h, end));
+    // El texto final llega un momento antes de que el bucle se dé por
+    // terminado: se esperan las dos cosas.
+    wait_until(&mut h, "el final", |h| {
+        has(h, end) && !h.state().agent.running()
+    });
     h.get_by_label("He dibujado la poción. <promise>LISTO</promise>");
-    assert!(!h.state().agent.running());
     assert!(h.query_by_label("Pensando…").is_none());
     assert!(h.query_by_label("Vuelta 1 de 8").is_none(), "sin pastilla");
     h.get_by_label("Vuelta 1: hecha");

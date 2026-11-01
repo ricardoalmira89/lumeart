@@ -81,7 +81,9 @@ Si `reference/` no existe, ejecuta `bash scripts/setup-reference.sh`.
   mensajes de commit en español.
 - Errores con `thiserror` por crate; `anyhow` solo en `crates/lumeart`.
 - Commits: `T:<n>: <título de la tarea>` (por ejemplo `T:2: Implementar Rgba`).
-- Sin `unsafe` (lo prohíbe el workspace).
+- Sin `unsafe` (lo prohíbe el workspace). Hay una única excepción, solo en
+  Windows, en `crates/lumeart/src/daemon.rs` (ver `docs/02-decisiones.md`);
+  `tests/arquitectura.rs` impide añadir otra.
 
 ## Comprobaciones de cada vuelta
 

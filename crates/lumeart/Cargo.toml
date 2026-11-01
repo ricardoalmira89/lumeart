@@ -49,6 +49,10 @@ assets = [
 ]
 
 # El icono del .exe (assets/brand/icon.ico) se pone al compilar en Windows.
+# Para no heredar la salida de quien lanza la sesión (src/daemon.rs).
+[target.'cfg(windows)'.dependencies]
+windows-sys.workspace = true
+
 [target.'cfg(windows)'.build-dependencies]
 winresource.workspace = true
 

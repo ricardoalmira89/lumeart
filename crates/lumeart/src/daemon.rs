@@ -146,6 +146,45 @@ fn detach(command: &mut Command) {
         const DETACHED_PROCESS: u32 = 0x0000_0008;
         const CREATE_NEW_PROCESS_GROUP: u32 = 0x0000_0200;
         command.creation_flags(DETACHED_PROCESS | CREATE_NEW_PROCESS_GROUP);
+        stop_inheriting_std_handles();
+    }
+}
+
+/// En Windows, un proceso hijo hereda *todos* los handles heredables del
+/// padre, no solo los tres que se le dan. Si `lumeart start` se lanzó con la
+/// salida en una tubería (un script, `Command::output()` de un test), la
+/// sesión se quedaría con esa tubería abierta mientras viva, y quien lee la
+/// salida de `lumeart start` no terminaría nunca de leer. Por eso, antes de
+/// lanzarla, la entrada y las salidas propias dejan de ser heredables; la
+/// sesión recibe las suyas (`Stdio::null()`) y los demás hijos que se lancen
+/// con `Stdio::inherit()` siguen funcionando, porque la biblioteca estándar
+/// duplica el handle al dárselo.
+///
+/// Es el único `unsafe` del proyecto (lo comprueba `tests/arquitectura.rs`):
+/// la biblioteca estándar no tiene una forma segura de cambiar la herencia de
+/// un handle.
+#[cfg(windows)]
+#[allow(unsafe_code)]
+fn stop_inheriting_std_handles() {
+    use std::os::windows::io::AsRawHandle;
+    use windows_sys::Win32::Foundation::{HANDLE_FLAG_INHERIT, SetHandleInformation};
+
+    for handle in [
+        std::io::stdin().as_raw_handle(),
+        std::io::stdout().as_raw_handle(),
+        std::io::stderr().as_raw_handle(),
+    ] {
+        if handle.is_null() {
+            continue;
+        }
+        // SAFETY: `SetHandleInformation` solo cambia un indicador del handle y
+        // no toca memoria de Rust. Los handles son los de la entrada y salidas
+        // estándar del propio proceso, que siguen abiertos mientras vive; si
+        // alguno no es válido, la llamada devuelve un error, que se ignora: lo
+        // peor que pasa es lo de antes (que la sesión lo herede).
+        unsafe {
+            SetHandleInformation(handle, HANDLE_FLAG_INHERIT, 0);
+        }
     }
 }
 

@@ -256,9 +256,13 @@ async fn export_errors_come_back_as_protocol_errors() {
         .line("export /no/existe/a.png", Origin::Cli, None)
         .await
         .unwrap();
+    // La ruta sale con el separador del sistema.
     assert_eq!(
         r.response.to_string(),
-        "err io open /no/existe/a.png: no such file or directory"
+        format!(
+            "err io open {}: no such file or directory",
+            "/no/existe/a.png".replace('/', std::path::MAIN_SEPARATOR_STR)
+        )
     );
     session.close().await;
 }

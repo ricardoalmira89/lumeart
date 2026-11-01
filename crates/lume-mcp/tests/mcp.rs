@@ -362,12 +362,15 @@ async fn create_returns_at_once_and_wait_brings_the_files() {
     assert_eq!(status["written"], true);
     let png = dir.path().join("assets/art/cofre_de_madera.png");
     let lume = dir.path().join("assets/art/cofre_de_madera.lume");
-    assert_eq!(status["png"], png.to_string_lossy().as_ref());
-    assert_eq!(status["lume"], lume.to_string_lossy().as_ref());
+    // Como rutas (en Windows mezclan «/» de la guía y «\\» del sistema).
+    assert_eq!(Path::new(status["png"].as_str().unwrap()), png);
+    assert_eq!(Path::new(status["lume"].as_str().unwrap()), lume);
     let summary = texts(&done)[0].clone();
     assert!(summary.contains("terminado"), "{summary}");
     assert!(
-        summary.contains("assets/art/cofre_de_madera.png"),
+        summary
+            .replace('\\', "/")
+            .contains("assets/art/cofre_de_madera.png"),
         "{summary}"
     );
 

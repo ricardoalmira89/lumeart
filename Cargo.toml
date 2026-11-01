@@ -85,6 +85,9 @@ serde_json = { version = "1", features = ["float_roundtrip"] }
 zip = { version = "2.4", default-features = false, features = ["deflate"] }
 # Solo al compilar en Windows: el icono y los datos del .exe.
 winresource = "0.1.34"
+# Solo en Windows: que la sesión en segundo plano no herede la salida de quien
+# la lanza (ver `crates/lumeart/src/daemon.rs`). Ya la traía `keyring`.
+windows-sys = { version = "0.60", features = ["Win32_Foundation"] }
 
 # Solo para tests.
 proptest = "1"
@@ -96,7 +99,9 @@ http-body-util = "0.1"
 egui_kittest = { version = "0.37", features = ["snapshot", "wgpu", "eframe"] }
 
 [workspace.lints.rust]
-unsafe_code = "forbid"
+# `deny` y no `forbid` por una única excepción, solo en Windows, en
+# `crates/lumeart/src/daemon.rs` (la comprueba `tests/arquitectura.rs`).
+unsafe_code = "deny"
 
 [workspace.lints.clippy]
 all = { level = "warn", priority = -1 }

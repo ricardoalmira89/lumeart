@@ -1,0 +1,14 @@
+# Finales de línea LF en todos los sistemas: los prompts, la skill y los datos
+# de prueba se leen con include_str! y se comparan tal cual (en Windows, Git
+# los cambiaría a CRLF al sacarlos).
+* text=auto eol=lf
+
+# Binarios: tal cual.
+*.png binary
+*.gif binary
+*.ico binary
+*.icns binary
+*.ttf binary
+*.lume binary
+*.zip binary
+*.pdf binary

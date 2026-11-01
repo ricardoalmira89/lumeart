@@ -81,15 +81,27 @@ impl DocumentStore for FsStore {
 /// Error `io` con un mensaje como los de Go en pxcli:
 /// `open /ruta/x.png: no such file or directory`.
 pub(crate) fn io_error(op: &str, path: &Path, err: &std::io::Error) -> DomainError {
-    DomainError::new(
-        ErrorCode::Io,
-        format!("{op} {}: {}", path.display(), go_error_text(err)),
-    )
+    // Windows contesta «acceso denegado» al escribir sobre una carpeta; Go en
+    // Unix (y pxcli) dice «is a directory».
+    let text = if path.is_dir() && err.kind() != std::io::ErrorKind::NotFound {
+        "is a directory".to_string()
+    } else {
+        go_error_text(err)
+    };
+    DomainError::new(ErrorCode::Io, format!("{op} {}: {text}", path.display()))
 }
 
 /// Texto de un error de E/S al estilo de Go: sin «(os error N)» y con la
-/// primera letra en minúscula («no such file or directory»).
+/// primera letra en minúscula («no such file or directory»). Los errores
+/// habituales salen con el texto de Unix en todos los sistemas, para que el
+/// protocolo diga lo mismo en Linux, Windows y macOS.
 fn go_error_text(err: &std::io::Error) -> String {
+    match err.kind() {
+        std::io::ErrorKind::NotFound => return "no such file or directory".into(),
+        std::io::ErrorKind::PermissionDenied => return "permission denied".into(),
+        std::io::ErrorKind::IsADirectory => return "is a directory".into(),
+        _ => {}
+    }
     let text = err.to_string();
     let text = match text.rfind(" (os error ") {
         Some(i) => &text[..i],

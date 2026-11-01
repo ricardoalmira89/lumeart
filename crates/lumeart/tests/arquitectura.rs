@@ -120,3 +120,44 @@ fn every_workspace_crate_is_checked() {
         }
     }
 }
+
+/// El workspace deniega `unsafe` y solo hay una excepción: la función de
+/// Windows de `crates/lumeart/src/daemon.rs` que impide que la sesión herede
+/// la salida de quien la lanza (`docs/02-decisiones.md`). Ninguna otra.
+#[test]
+fn unsafe_is_only_allowed_in_one_place() {
+    fn rust_files(dir: &Path, out: &mut Vec<std::path::PathBuf>) {
+        for entry in fs::read_dir(dir).expect("carpeta") {
+            let path = entry.expect("entrada").path();
+            if path.is_dir() {
+                rust_files(&path, out);
+            } else if path.extension().is_some_and(|e| e == "rs") {
+                out.push(path);
+            }
+        }
+    }
+    let root = Path::new(env!("CARGO_MANIFEST_DIR")).join("../..");
+    let workspace = fs::read_to_string(root.join("Cargo.toml")).unwrap();
+    assert!(workspace.contains("unsafe_code = \"deny\""));
+
+    let mut files = Vec::new();
+    rust_files(&root.join("crates"), &mut files);
+    let mut found = Vec::new();
+    for file in files {
+        let text = fs::read_to_string(&file).unwrap();
+        let count = text.matches("allow(unsafe_code)").count();
+        let name = file
+            .strip_prefix(&root)
+            .unwrap()
+            .to_string_lossy()
+            .replace('\\', "/");
+        // Este mismo archivo nombra el atributo en el texto de arriba.
+        if name == "crates/lumeart/tests/arquitectura.rs" {
+            continue;
+        }
+        if count > 0 {
+            found.push((name, count));
+        }
+    }
+    assert_eq!(found, [("crates/lumeart/src/daemon.rs".to_string(), 1)]);
+}

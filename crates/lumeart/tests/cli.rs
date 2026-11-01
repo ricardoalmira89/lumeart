@@ -189,7 +189,7 @@ async fn export_resolves_relative_paths_where_the_command_runs() {
         out.stderr,
         format!(
             "Error: err io open {}: no such file or directory\n",
-            game.join("no/existe/x.png").display()
+            game.join("no").join("existe").join("x.png").display()
         )
     );
     run.stop().await;

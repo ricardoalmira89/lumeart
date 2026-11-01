@@ -1014,7 +1014,9 @@ mod tests {
         );
     }
 
-    // Portado de TestExportCmd_ResolvesAbsolutePath.
+    // Portado de TestExportCmd_ResolvesAbsolutePath (rutas de Unix: en
+    // Windows «/abs» no es absoluta).
+    #[cfg(unix)]
     #[test]
     fn export_resolves_the_path_against_the_cwd() {
         assert_eq!(
