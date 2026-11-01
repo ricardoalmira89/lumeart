@@ -18,10 +18,11 @@ use lume_domain::Document;
 use lume_domain::vec::VecResult;
 use rmcp::handler::server::wrapper::Parameters;
 use rmcp::model::{CallToolResult, ContentBlock};
-use rmcp::{ErrorData, schemars, tool, tool_router};
+use rmcp::service::RequestContext;
+use rmcp::{ErrorData, RoleServer, schemars, tool, tool_router};
 use serde::Deserialize;
 
-use crate::{LumeMcp, fail, png_block};
+use crate::{LumeMcp, MAX_WAIT, Progress, fail, pause, png_block};
 
 /// Los motores con que el MCP pinta y exporta.
 #[derive(Clone)]
@@ -36,7 +37,7 @@ pub struct Engines {
 }
 
 /// Nombres de estas herramientas, en orden alfabético.
-pub const STUDIO_TOOLS: [&str; 26] = [
+pub const STUDIO_TOOLS: [&str; 27] = [
     "ask_window_agent",
     "close_tab",
     "document",
@@ -60,6 +61,7 @@ pub const STUDIO_TOOLS: [&str; 26] = [
     "view_animation",
     "view_vector",
     "view_vector_animation",
+    "wait_window_agent",
     "window_agent_status",
     "write_animation",
     "write_vector",
@@ -382,6 +384,17 @@ pub struct ModeArg {
     pub tab: Option<u64>,
     /// `pixel`, `vector` o `animation`.
     pub mode: String,
+}
+
+#[derive(Debug, Deserialize, schemars::JsonSchema)]
+pub struct WaitAgent {
+    /// Id de la pestaña (el de ask_window_agent); sin él, la activa.
+    #[serde(default)]
+    pub tab: Option<u64>,
+    /// Segundos como mucho que espera esta llamada. Sin él, espera hasta que
+    /// el agente termine.
+    #[serde(default)]
+    pub timeout_seconds: Option<u64>,
 }
 
 #[derive(Debug, Deserialize, schemars::JsonSchema)]
@@ -1123,7 +1136,7 @@ impl LumeMcp {
     }
 
     #[tool(
-        description = "Le pide algo al agente de una pestaña (tab; sin él, la activa), como si lo escribiera el usuario en su panel («que la tapa se abra», «más contraste en el pelo»). Cada pestaña tiene su agente: puedes lanzar varios a la vez en pestañas distintas. No espera: sigue con window_agent_status (con el mismo tab)."
+        description = "Le pide algo al agente de una pestaña (tab; sin él, la activa), como si lo escribiera el usuario en su panel («que la tapa se abra», «más contraste en el pelo»). Cada pestaña tiene su agente: puedes lanzar varios a la vez en pestañas distintas. No espera: llama justo después a wait_window_agent con el mismo tab, que te avisa al terminar sin preguntar una y otra vez."
     )]
     async fn ask_window_agent(
         &self,
@@ -1132,6 +1145,78 @@ impl LumeMcp {
         Ok(self
             .window(a.tab, WindowRequest::AskAgent { prompt: a.prompt })
             .await)
+    }
+
+    #[tool(
+        description = "Espera a que el agente de una pestaña (tab; sin él, la activa) termine y devuelve lo que dijo y el estado de las pestañas. Sin timeout_seconds espera hasta el final, con avisos de progreso: en Claude Code la llamada pasa sola a segundo plano a los 2 minutos y te avisa al terminar, así que llámala justo después de ask_window_agent y sigue con otra cosa. Para varios agentes a la vez, una llamada por pestaña."
+    )]
+    async fn wait_window_agent(
+        &self,
+        Parameters(a): Parameters<WaitAgent>,
+        ctx: RequestContext<RoleServer>,
+    ) -> Result<CallToolResult, ErrorData> {
+        let studio = match self.studio() {
+            Ok(s) => s,
+            Err(e) => return Ok(e),
+        };
+        let limit = a
+            .timeout_seconds
+            .map(|s| s.clamp(1, MAX_WAIT))
+            .unwrap_or(MAX_WAIT);
+        let start = std::time::Instant::now();
+        let mut progress = Progress::new(&ctx);
+        loop {
+            if ctx.ct.is_cancelled() {
+                return Ok(fail(
+                    "espera cancelada: el agente sigue trabajando (wait_window_agent para volver a esperarlo)",
+                ));
+            }
+            let state = match studio.window(a.tab, WindowRequest::State).await {
+                Ok(state) => state,
+                Err(e) => return Ok(port(e)),
+            };
+            let target = state.tab;
+            if let Some(job) = state
+                .tabs
+                .iter()
+                .find(|t| Some(t.id) == target)
+                .and_then(|t| t.job)
+            {
+                return Ok(fail(format!(
+                    "esa pestaña es el encargo {job}: espéralo con wait_art (id {job})"
+                )));
+            }
+            let who = match target {
+                Some(t) => format!("pestaña {t}"),
+                None => "pestaña activa".into(),
+            };
+            if !state.agent_running {
+                return Ok(ok(format!(
+                    "El agente de la {who} ha terminado.\n{}",
+                    window_report(&state)
+                )));
+            }
+            if start.elapsed().as_secs() >= limit {
+                return Ok(ok(format!(
+                    "El agente de la {who} sigue trabajando (se acabó el tiempo de esta espera: vuelve a llamar a wait_window_agent).\n{}",
+                    window_report(&state)
+                )));
+            }
+            let said = state
+                .agent_messages
+                .last()
+                .and_then(|m| m.lines().find(|l| !l.trim().is_empty()))
+                .map(|l| l.chars().take(80).collect::<String>())
+                .unwrap_or_else(|| "trabajando".into());
+            progress
+                .update(
+                    start.elapsed().as_secs_f64() / 60.0,
+                    None,
+                    format!("{who}: {said}"),
+                )
+                .await;
+            pause(&ctx, std::time::Duration::from_secs(1)).await;
+        }
     }
 
     #[tool(

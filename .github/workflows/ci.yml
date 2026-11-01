@@ -19,6 +19,7 @@ jobs:
   lint:
     name: Formato y Clippy
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
       - uses: dtolnay/rust-toolchain@1.95.0
@@ -37,6 +38,8 @@ jobs:
 
   test:
     name: Compilar y probar (${{ matrix.os }})
+    # Si un test se cuelga, el trabajo se corta (y su registro dice cuál).
+    timeout-minutes: 60
     strategy:
       fail-fast: false
       matrix:

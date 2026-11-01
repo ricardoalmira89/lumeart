@@ -37,10 +37,13 @@ configurado en LumeArt, no el tuyo.
    - Los encargos son de `kind: sprite`. Para vector o animación, trabaja
      sobre el documento abierto (abajo).
    - Devuelve un número de encargo al momento.
-3. **Espera** con `wait_art` y ese número (`timeout_seconds`, 30 por defecto
-   y hasta 300). Un encargo puede tardar varios minutos: mientras el estado
-   sea `running`, vuelve a llamarla. Al terminar (`done`) trae las rutas del
-   `.png` y del `.lume` y una vista previa: **mírala**.
+3. **Espera** con `wait_art` y ese número, justo después, **sin
+   `timeout_seconds`**: espera hasta que termine (puede tardar varios
+   minutos) mandando avisos de progreso. En Claude Code la llamada pasa sola
+   a segundo plano a los 2 minutos y te avisa cuando termina: sigue con otra
+   cosa mientras tanto y **no preguntes una y otra vez**. Al terminar
+   (`done`) trae las rutas del `.png` y del `.lume` y una vista previa:
+   **mírala**. Con varios encargos a la vez, una `wait_art` por encargo.
 4. **Revisa.** Si no encaja, llama a `revise_art` con el número o el nombre
    y `changes` en concreto («el contorno es demasiado grueso», «la tapa debe
    ser más clara»). Sigue el mismo dibujo, guarda una versión nueva y
@@ -77,7 +80,7 @@ independiente con su propio agente y un id fijo (`list_tabs` los da;
 herramientas de abajo aceptan `tab`: con él trabajas en esa pestaña sin
 cambiar la que ve el usuario; sin él, en la activa. Para tres piezas: crea
 tres pestañas, guarda sus ids y trabaja en cada una con su `tab` (o lanza
-`ask_window_agent` en las tres y sigue cada una con `window_agent_status`).
+`ask_window_agent` en las tres y espera cada una con `wait_window_agent`).
 Los encargos de `create_art` también salen como pestañas (`list_tabs` dice su
 número de encargo); léelos con `tab`, pero cámbialos con `revise_art`.
 
@@ -107,10 +110,12 @@ número de encargo); léelos con `tab`, pero cámbialos con `revise_art`.
   `animation`), `open_document`, `save_document`, `select_tab` (solo cambia lo
   que ve el usuario), `close_tab`, `rename_document`, `set_mode`.
 - **Su agente**: `ask_window_agent` le pide algo a la pestaña `tab` (o a la
-  activa) como si lo escribiera el usuario; sigue con `window_agent_status`
-  (mismo `tab`) y para con `stop_window_agent`. Cada pestaña tiene el suyo:
-  pueden trabajar varios a la vez. Úsalo si el usuario quiere que lo haga
-  LumeArt; si no, hazlo tú con las herramientas de arriba.
+  activa) como si lo escribiera el usuario. Justo después, `wait_window_agent`
+  (mismo `tab`, sin `timeout_seconds`) espera a que termine y te avisa, como
+  `wait_art`: no hace falta mirar `window_agent_status` una y otra vez. Para
+  pararlo, `stop_window_agent`. Cada pestaña tiene el suyo: pueden trabajar
+  varios a la vez. Úsalo si el usuario quiere que lo haga LumeArt; si no,
+  hazlo tú con las herramientas de arriba.
 
 ## Sin MCP
 

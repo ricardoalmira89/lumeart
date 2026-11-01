@@ -15,6 +15,16 @@ fn lumeart(cwd: &Path, args: &[&str]) -> Output {
         .unwrap()
 }
 
+/// La carpeta como la ve el programa desde dentro: en macOS, la temporal
+/// está en /var, que es un enlace a /private/var, y el programa ve la real.
+fn seen(dir: &Path) -> std::path::PathBuf {
+    if cfg!(target_os = "macos") {
+        std::fs::canonicalize(dir).unwrap()
+    } else {
+        dir.to_path_buf()
+    }
+}
+
 fn text(bytes: &[u8]) -> String {
     String::from_utf8_lossy(bytes).into_owned()
 }
@@ -22,24 +32,16 @@ fn text(bytes: &[u8]) -> String {
 #[test]
 fn init_creates_the_guide_and_does_not_overwrite_it() {
     let dir = tempfile::tempdir().unwrap();
-    let path = dir.path().join("lumeart.toml");
+    let path = seen(dir.path()).join("lumeart.toml");
 
     let out = lumeart(dir.path(), &["init"]);
     assert!(out.status.success(), "{}", text(&out.stderr));
-    let stdout = text(&out.stdout);
-    let (first, rest) = stdout.split_once('\n').unwrap();
-    // La ruta que se ve es la real de la carpeta (en macOS, /var es un enlace
-    // a /private/var): se comparan las dos resueltas.
-    let shown = first
-        .strip_prefix("Guía de arte creada en ")
-        .unwrap_or_else(|| panic!("{stdout}"));
     assert_eq!(
-        std::fs::canonicalize(shown).unwrap(),
-        std::fs::canonicalize(&path).unwrap()
-    );
-    assert_eq!(
-        rest,
-        "Los recursos irán a assets/art/. Edita el archivo para cambiar el estilo, el tamaño o la paleta.\n"
+        text(&out.stdout),
+        format!(
+            "Guía de arte creada en {}\nLos recursos irán a assets/art/. Edita el archivo para cambiar el estilo, el tamaño o la paleta.\n",
+            path.display()
+        )
     );
     assert_eq!(load_guide(&path), Ok(ArtGuide::default()));
 

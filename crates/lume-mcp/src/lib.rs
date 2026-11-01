@@ -27,7 +27,7 @@ use rmcp::handler::server::wrapper::Parameters;
 use rmcp::model::{
     CallToolResult, ContentBlock, Implementation, ListResourcesResult, PaginatedRequestParams,
     ProgressNotificationParam, ReadResourceRequestParams, ReadResourceResponse, ReadResourceResult,
-    RequestMetaObject, Resource, ResourceContents, ServerCapabilities, ServerConfig,
+    Resource, ResourceContents, ServerCapabilities, ServerConfig,
 };
 use rmcp::service::RequestContext;
 use rmcp::{
@@ -54,9 +54,65 @@ pub const TOOLS: [&str; 8] = [
 /// URI del recurso con la guía de arte.
 pub const GUIDE_URI: &str = "lumeart://guia";
 
-/// Espera por defecto de `wait_art` y máxima.
-pub const DEFAULT_WAIT: u64 = 30;
-pub const MAX_WAIT: u64 = 300;
+/// Lo más que espera `wait_art` (o `wait_window_agent`), en segundos. Sin
+/// `timeout_seconds`, espera hasta el final con este tope.
+pub const MAX_WAIT: u64 = 3 * 60 * 60;
+
+/// Cada cuánto se avisa de que se sigue esperando aunque nada cambie: así el
+/// cliente no da la llamada por colgada (Claude Code la corta a los 30
+/// minutos sin noticias) y, si la pasó a segundo plano, sabe que sigue viva.
+const HEARTBEAT: Duration = Duration::from_secs(15);
+
+/// Los avisos de progreso de una espera larga (`notifications/progress`),
+/// si el cliente los pidió con un token: cuando cambia el mensaje y, si no,
+/// cada [`HEARTBEAT`]. El valor nunca baja.
+pub(crate) struct Progress {
+    peer: Peer<RoleServer>,
+    token: Option<rmcp::model::ProgressToken>,
+    value: f64,
+    message: Option<String>,
+    sent: Option<Instant>,
+}
+
+impl Progress {
+    pub(crate) fn new(ctx: &RequestContext<RoleServer>) -> Self {
+        Self {
+            peer: ctx.peer.clone(),
+            token: ctx.meta.get_progress_token(),
+            value: 0.0,
+            message: None,
+            sent: None,
+        }
+    }
+
+    pub(crate) async fn update(&mut self, value: f64, total: Option<f64>, message: String) {
+        let Some(token) = self.token.clone() else {
+            return;
+        };
+        let changed = self.message.as_deref() != Some(message.as_str());
+        let due = self.sent.is_none_or(|t| t.elapsed() >= HEARTBEAT);
+        if !changed && !due {
+            return;
+        }
+        // Siempre un poco más que la vez anterior (el protocolo pide que suba).
+        self.value = value.max(self.value + 0.001);
+        let mut param = ProgressNotificationParam::new(token, self.value).with_message(&message);
+        if let Some(total) = total {
+            param = param.with_total(total.max(self.value));
+        }
+        let _ = self.peer.notify_progress(param).await;
+        self.message = Some(message);
+        self.sent = Some(Instant::now());
+    }
+}
+
+/// Espera `step` o a que el cliente cancele la llamada.
+pub(crate) async fn pause(ctx: &RequestContext<RoleServer>, step: Duration) {
+    tokio::select! {
+        _ = tokio::time::sleep(step) => {}
+        _ = ctx.ct.cancelled() => {}
+    }
+}
 
 /// Cada cuánto mira `wait_art` el estado del encargo.
 const POLL: Duration = Duration::from_millis(200);
@@ -66,7 +122,7 @@ const VIEW_SIDE: u32 = 512;
 
 const INSTRUCTIONS: &str = "LumeArt dibuja el arte del juego con su propio agente y su bucle de refinado. \
 Llama primero a `art_guide`. Encarga cada recurso con `create_art` (devuelve un número al momento), \
-espera con `wait_art` (vuelve a llamarla mientras diga que sigue en marcha) y mira la vista previa. \
+espera con `wait_art` (sin timeout_seconds espera hasta el final; en Claude Code pasa sola a segundo plano y te avisa al terminar, sin preguntar una y otra vez) y mira la vista previa. \
 Si no encaja, `revise_art` con lo que falla en concreto. Los archivos quedan en la carpeta de la guía \
 (`lumeart.toml`). `draw`, `view_canvas` y `export` son de bajo nivel: el lienzo de siempre con el \
 protocolo de pxcli. Además puedes hacer todo lo de la ventana de LumeArt sobre el documento abierto \
@@ -76,7 +132,7 @@ bone/part/action y se revisa con `view_vector_animation` y se exporta con `expor
 `read_animation`, `write_animation` y `view_animation` para la animación de pixel art (anim.js); \
 `undo`, `save_version` y `restore_version`; y la ventana: `list_tabs`, `new_document`, \
 `open_document`, `save_document`, `select_tab`, `close_tab`, `rename_document`, `set_mode` y su \
-agente (`ask_window_agent`, `window_agent_status`, `stop_window_agent`). Lo que cambias se ve al \
+agente (`ask_window_agent`; después `wait_window_agent`, que espera y te avisa al terminar; `window_agent_status`, `stop_window_agent`). Lo que cambias se ve al \
 momento en la ventana y se puede deshacer. Cada pestaña es un documento independiente con su propio \
 agente y un id fijo (lo dan `list_tabs`, `new_document` y `open_document`): todas estas herramientas \
 aceptan `tab` para trabajar en esa pestaña sin cambiar la que ve el usuario, así que puedes llevar \
@@ -193,7 +249,9 @@ pub struct CreateArt {
 pub struct WaitArt {
     /// Número del encargo que devolvió `create_art` o `revise_art`.
     pub id: ArtId,
-    /// Segundos como mucho que espera esta llamada (por defecto 30, máximo 300).
+    /// Segundos como mucho que espera esta llamada. Sin él, espera hasta que
+    /// termine (con avisos de progreso; en Claude Code pasa sola a segundo
+    /// plano y avisa al terminar).
     #[serde(default)]
     pub timeout_seconds: Option<u64>,
 }
@@ -248,6 +306,13 @@ impl LumeMcp {
     ) -> Self {
         self.studio = Some(studio);
         self.engines = Some(engines);
+        self
+    }
+
+    /// Con acceso al studio pero sin motores: las herramientas del documento
+    /// y de la ventana funcionan, y las que pintan dicen que no pueden.
+    pub fn with_studio_only(mut self, studio: Arc<dyn lume_app::studio::StudioAccess>) -> Self {
+        self.studio = Some(studio);
         self
     }
 
@@ -312,7 +377,7 @@ impl LumeMcp {
                 text.push_str(&format!("Vuelta {} de {}.", status.turn, status.max_turns));
             }
             text.push_str(&format!(
-                " Vuelve a llamar a wait_art con id {} para seguir esperando.\n",
+                " Se acabó el tiempo de esta espera: vuelve a llamar a wait_art con id {} (sin timeout_seconds espera hasta el final).\n",
                 status.id
             ));
         } else {
@@ -431,7 +496,7 @@ impl LumeMcp {
         match self.art.create(spec).await {
             Ok(status) => Ok(CallToolResult::success(vec![
                 ContentBlock::text(format!(
-                    "Encargo {id} en marcha: «{name}» ({w}x{h}). Llama a wait_art con id {id}; puede tardar varios minutos.",
+                    "Encargo {id} en marcha: «{name}» ({w}x{h}). Llama ya a wait_art con id {id}: espera hasta el final y, en Claude Code, se queda en segundo plano y te avisa al terminar (puede tardar varios minutos).",
                     id = status.id,
                     w = size.0,
                     h = size.1
@@ -443,46 +508,56 @@ impl LumeMcp {
     }
 
     #[tool(
-        description = "Espera a un encargo como mucho timeout_seconds (30 por defecto) y devuelve su estado (running, done, failed, cancelled), la vuelta, las rutas de los archivos y una vista previa. Si sigue en marcha, vuelve a llamarla."
+        description = "Espera a que termine un encargo y devuelve su estado (done, failed, cancelled), las rutas de los archivos y una vista previa. Sin timeout_seconds espera hasta el final, con avisos de progreso: en Claude Code la llamada pasa sola a segundo plano a los 2 minutos y te avisa al terminar, así que llámala justo después de create_art o revise_art y sigue con otra cosa; no hace falta preguntar una y otra vez. Con timeout_seconds espera como mucho eso."
     )]
     async fn wait_art(
         &self,
         Parameters(args): Parameters<WaitArt>,
-        meta: RequestMetaObject,
-        client: Peer<RoleServer>,
+        ctx: RequestContext<RoleServer>,
     ) -> Result<CallToolResult, ErrorData> {
-        let wait = Duration::from_secs(
-            args.timeout_seconds
-                .unwrap_or(DEFAULT_WAIT)
-                .clamp(1, MAX_WAIT),
-        );
-        let deadline = Instant::now() + wait;
-        let token = meta.get_progress_token();
-        let mut last_turn = None;
+        let limit = args
+            .timeout_seconds
+            .map(|s| s.clamp(1, MAX_WAIT))
+            .unwrap_or(MAX_WAIT);
+        let deadline = Instant::now() + Duration::from_secs(limit);
+        let mut progress = Progress::new(&ctx);
+        let mut turn = (u32::MAX, Instant::now());
         let status = loop {
+            if ctx.ct.is_cancelled() {
+                return Ok(fail(format!(
+                    "espera cancelada: el encargo {} sigue en marcha (wait_art con su id para volver a esperarlo)",
+                    args.id
+                )));
+            }
             let status = match self.art.status(args.id).await {
                 Ok(status) => status,
                 Err(e) => return Ok(fail(e.to_string())),
             };
-            if let Some(token) = &token
-                && last_turn != Some(status.turn)
-            {
-                last_turn = Some(status.turn);
-                let _ = client
-                    .notify_progress(
-                        ProgressNotificationParam::new(token.clone(), f64::from(status.turn))
-                            .with_total(f64::from(status.max_turns))
-                            .with_message(format!(
-                                "{}: vuelta {} de {}",
-                                status.name, status.turn, status.max_turns
-                            )),
-                    )
-                    .await;
+            if status.turn != turn.0 {
+                turn = (status.turn, Instant::now());
             }
+            // Vueltas hechas y lo que va de la actual (sin llegar a la
+            // siguiente).
+            let within = (turn.1.elapsed().as_secs_f64() / 600.0).min(0.95);
+            let message = if status.turn == 0 {
+                format!("{}: empezando", status.name)
+            } else {
+                format!(
+                    "{}: vuelta {} de {}",
+                    status.name, status.turn, status.max_turns
+                )
+            };
+            progress
+                .update(
+                    f64::from(status.turn.saturating_sub(1)) + within,
+                    Some(f64::from(status.max_turns)),
+                    message,
+                )
+                .await;
             if status.state != ArtState::Running || Instant::now() >= deadline {
                 break status;
             }
-            tokio::time::sleep(POLL).await;
+            pause(&ctx, POLL).await;
         };
         let base = self
             .project()
@@ -554,7 +629,7 @@ impl LumeMcp {
         match self.art.create(spec).await {
             Ok(status) => Ok(CallToolResult::success(vec![
                 ContentBlock::text(format!(
-                    "Revisión de «{name}» en marcha: encargo {id}. Llama a wait_art con id {id}.",
+                    "Revisión de «{name}» en marcha: encargo {id}. Llama ya a wait_art con id {id}: te avisa al terminar.",
                     id = status.id
                 )),
                 ContentBlock::text(status_json(&status).to_string()),

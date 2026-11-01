@@ -55,6 +55,13 @@ elegiste en los Ajustes de LumeArt (tu suscripción de Claude Code o una clave
 de Anthropic u OpenAI). Con la ventana abierta, cada encargo sale como una
 pestaña y se ve cómo avanza.
 
+**Sin preguntar cada poco cómo va.** `wait_art` (y `wait_window_agent`, para
+el agente de una pestaña) esperan hasta que el dibujo termina y, mientras
+tanto, mandan avisos de progreso («vuelta 2 de 4»). En Claude Code, una
+llamada que dura más de 2 minutos pasa sola a segundo plano: tu LLM sigue
+con otra cosa y Claude Code le avisa cuando LumeArt termina, con las rutas
+de los archivos. No hace falta hacer nada para activarlo.
+
 **Dibujar tu LLM en el documento** (`read_vector`, `edit_vector`,
 `write_vector`, `view_vector`, `write_animation`, `undo`…). Tu LLM escribe el
 código del dibujo (`dibujo.js` o `anim.js`) y revisa el resultado en las
@@ -74,7 +81,8 @@ Para tres piezas, tu LLM puede:
    una (`list_tabs` los lista todos).
 2. Trabajar en cada una con su `tab` (`write_vector`, `view_vector`…), o
    pedírselas al agente de LumeArt con `ask_window_agent` en las tres
-   pestañas y seguir cada una con `window_agent_status`.
+   pestañas y esperar cada una con `wait_window_agent` (te avisa al
+   terminar).
 3. Guardarlas con `save_document` y su `tab`.
 
 O, más sencillo, lanzar tres `create_art` seguidos: los tres se dibujan a la
@@ -129,5 +137,10 @@ Con otro cliente de MCP debería funcionar igual (el servidor es
   guardan la conexión vieja: reconéctalo (en Claude Code, `/mcp`).
 - **«No hay pestaña N».** Los ids cambian al cerrar y abrir la ventana: pide
   otra vez `list_tabs`.
-- **El encargo no termina.** `wait_art` espera como mucho cinco minutos por
-  llamada: vuelve a llamarla mientras diga que sigue en marcha.
+- **El encargo no termina.** `wait_art` sin `timeout_seconds` espera hasta
+  el final (con un tope de tres horas). Si se le dio un `timeout_seconds` y
+  dice que sigue en marcha, vuelve a llamarla sin él.
+- **La espera se corta.** Claude Code corta una llamada si pasa 30 minutos
+  sin noticias; LumeArt manda un aviso de progreso cada 15 segundos para que
+  no ocurra. Si aun así se corta, el encargo sigue: `wait_art` con su número
+  lo vuelve a esperar.

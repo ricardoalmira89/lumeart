@@ -323,7 +323,7 @@ async fn create_returns_at_once_and_wait_brings_the_files() {
     let id = json["id"].as_u64().unwrap();
     assert_eq!(json["state"], "running");
     assert_eq!(json["name"], "cofre_de_madera");
-    assert!(texts(&created)[0].contains(&format!("Llama a wait_art con id {id}")));
+    assert!(texts(&created)[0].contains(&format!("Llama ya a wait_art con id {id}")));
 
     // Esperar poco: sigue en marcha.
     let waiting = call(
@@ -333,7 +333,7 @@ async fn create_returns_at_once_and_wait_brings_the_files() {
     )
     .await;
     assert_eq!(json_of(&waiting)["state"], "running");
-    assert!(texts(&waiting)[0].contains("Vuelve a llamar a wait_art"));
+    assert!(texts(&waiting)[0].contains("vuelve a llamar a wait_art"));
     assert!(
         !dir.path().join("assets/art/cofre_de_madera.png").exists(),
         "aún no hay archivos"
@@ -345,8 +345,9 @@ async fn create_returns_at_once_and_wait_brings_the_files() {
         .client
         .send_cancellable_request(
             ClientRequest::CallToolRequest(Request::new(
+                // Sin timeout_seconds: espera hasta el final.
                 CallToolRequestParams::new("wait_art")
-                    .with_arguments(args(serde_json::json!({ "id": id, "timeout_seconds": 20 }))),
+                    .with_arguments(args(serde_json::json!({ "id": id }))),
             )),
             PeerRequestOptions::no_options(),
         )
@@ -520,4 +521,184 @@ async fn the_low_level_tools_use_the_main_canvas() {
     assert_eq!(file.width(), 16);
     assert_eq!(file.get(2, 2).unwrap(), Rgba::rgb(255, 0, 0));
     f.client.cancel().await.unwrap();
+}
+
+/// Un studio de mentira cuyo agente trabaja durante `busy` consultas del
+/// estado y luego termina.
+struct BusyStudio {
+    busy: Mutex<u32>,
+}
+
+impl lume_app::studio::StudioAccess for BusyStudio {
+    fn snapshot(
+        &self,
+        _tab: Option<u64>,
+    ) -> lume_app::ports::BoxFuture<'_, Result<Document, lume_app::ports::PortError>> {
+        Box::pin(async { Err(lume_app::ports::PortError::Unavailable("no".into())) })
+    }
+    fn set_vector(
+        &self,
+        _tab: Option<u64>,
+        _source: String,
+    ) -> lume_app::ports::BoxFuture<'_, Result<(), lume_app::ports::PortError>> {
+        Box::pin(async { Ok(()) })
+    }
+    fn set_animation(
+        &self,
+        _tab: Option<u64>,
+        _source: String,
+    ) -> lume_app::ports::BoxFuture<'_, Result<(), lume_app::ports::PortError>> {
+        Box::pin(async { Ok(()) })
+    }
+    fn undo(
+        &self,
+        _tab: Option<u64>,
+        _steps: u32,
+        _redo: bool,
+    ) -> lume_app::ports::BoxFuture<'_, Result<u32, lume_app::ports::PortError>> {
+        Box::pin(async { Ok(0) })
+    }
+    fn save_version(
+        &self,
+        _tab: Option<u64>,
+        _message: String,
+    ) -> lume_app::ports::BoxFuture<'_, Result<u32, lume_app::ports::PortError>> {
+        Box::pin(async { Ok(1) })
+    }
+    fn restore_version(
+        &self,
+        _tab: Option<u64>,
+        _number: u32,
+    ) -> lume_app::ports::BoxFuture<'_, Result<(), lume_app::ports::PortError>> {
+        Box::pin(async { Ok(()) })
+    }
+    fn window(
+        &self,
+        tab: Option<u64>,
+        _request: lume_app::studio::WindowRequest,
+    ) -> lume_app::ports::BoxFuture<
+        '_,
+        Result<lume_app::studio::WindowState, lume_app::ports::PortError>,
+    > {
+        Box::pin(async move {
+            let running = {
+                let mut busy = self.busy.lock().unwrap();
+                let running = *busy > 0;
+                *busy = busy.saturating_sub(1);
+                running
+            };
+            let tab = tab.unwrap_or(3);
+            Ok(lume_app::studio::WindowState {
+                tabs: vec![lume_app::studio::TabInfo {
+                    id: tab,
+                    index: 0,
+                    title: "cofre.lume".into(),
+                    mode: lume_app::studio::DocKind::Vector,
+                    dirty: false,
+                    active: true,
+                    agent_running: running,
+                    job: None,
+                }],
+                tab: Some(tab),
+                agent_running: running,
+                agent_messages: vec![if running {
+                    "Dibujo la tapa.".into()
+                } else {
+                    "Listo: la tapa ya se abre.".into()
+                }],
+                ..Default::default()
+            })
+        })
+    }
+}
+
+/// `wait_window_agent` espera a que el agente de la pestaña termine (sin
+/// preguntar una y otra vez), avisa del progreso mientras tanto y devuelve
+/// lo último que dijo; con `timeout_seconds` corto, dice que sigue.
+#[tokio::test(flavor = "multi_thread")]
+async fn wait_window_agent_waits_until_the_agent_finishes() {
+    let (dir, cwd) = project();
+    let studio = Arc::new(BusyStudio {
+        busy: Mutex::new(3),
+    });
+    let server = LumeMcp::new(
+        Arc::new(LocalArt::new(
+            Session::spawn(Document::new("principal", 8, 8).unwrap(), Arc::new(FsStore))
+                .handle
+                .clone(),
+            Arc::new(FsStore),
+            Arc::new(MemorySettingsStore::new(Settings::default())),
+            Arc::new(TestAgents {
+                store: Arc::new(FsStore),
+                open: watch::channel(true).1,
+                goals: Arc::new(Mutex::new(Vec::new())),
+            }),
+        )),
+        Arc::new(FsProject),
+        cwd.clone(),
+    )
+    .with_studio_only(studio.clone());
+    let (server_io, client_io) = tokio::io::duplex(1 << 20);
+    tokio::spawn(async move {
+        let running = server.serve(server_io).await.unwrap();
+        let _ = running.waiting().await;
+    });
+    let handler = Client::default();
+    let progress = handler.progress.clone();
+    let client = handler.serve(client_io).await.unwrap();
+    assert!(dir.path().exists());
+
+    // Con token de progreso: espera hasta el final.
+    let handle = client
+        .send_cancellable_request(
+            ClientRequest::CallToolRequest(Request::new(
+                CallToolRequestParams::new("wait_window_agent")
+                    .with_arguments(args(serde_json::json!({ "tab": 7 }))),
+            )),
+            PeerRequestOptions::no_options(),
+        )
+        .await
+        .unwrap();
+    let ServerResult::CallToolResult(done) = handle.await_response().await.unwrap() else {
+        panic!("se esperaba el resultado de wait_window_agent");
+    };
+    let text = done
+        .content
+        .iter()
+        .filter_map(|c| c.as_text().map(|t| t.text.clone()))
+        .collect::<Vec<_>>()
+        .join("\n");
+    assert!(
+        text.contains("El agente de la pestaña 7 ha terminado"),
+        "{text}"
+    );
+    assert!(text.contains("Listo: la tapa ya se abre."), "{text}");
+    assert_eq!(*studio.busy.lock().unwrap(), 0, "esperó a que terminara");
+    let notes = progress.lock().unwrap().clone();
+    assert!(!notes.is_empty(), "sin avisos de progreso");
+    assert!(
+        notes[0]
+            .message
+            .as_deref()
+            .is_some_and(|m| m.contains("pestaña 7: Dibujo la tapa.")),
+        "{notes:?}"
+    );
+
+    // Con un tiempo corto y el agente aún trabajando: lo dice.
+    *studio.busy.lock().unwrap() = 1000;
+    let result = client
+        .call_tool(
+            CallToolRequestParams::new("wait_window_agent")
+                .with_arguments(args(serde_json::json!({ "tab": 7, "timeout_seconds": 1 }))),
+        )
+        .await
+        .unwrap();
+    let text = result
+        .content
+        .iter()
+        .filter_map(|c| c.as_text().map(|t| t.text.clone()))
+        .collect::<Vec<_>>()
+        .join("\n");
+    assert!(text.contains("sigue trabajando"), "{text}");
+    client.cancel().await.unwrap();
 }
