@@ -26,12 +26,20 @@ fn init_creates_the_guide_and_does_not_overwrite_it() {
 
     let out = lumeart(dir.path(), &["init"]);
     assert!(out.status.success(), "{}", text(&out.stderr));
+    let stdout = text(&out.stdout);
+    let (first, rest) = stdout.split_once('\n').unwrap();
+    // La ruta que se ve es la real de la carpeta (en macOS, /var es un enlace
+    // a /private/var): se comparan las dos resueltas.
+    let shown = first
+        .strip_prefix("Guía de arte creada en ")
+        .unwrap_or_else(|| panic!("{stdout}"));
     assert_eq!(
-        text(&out.stdout),
-        format!(
-            "Guía de arte creada en {}\nLos recursos irán a assets/art/. Edita el archivo para cambiar el estilo, el tamaño o la paleta.\n",
-            path.display()
-        )
+        std::fs::canonicalize(shown).unwrap(),
+        std::fs::canonicalize(&path).unwrap()
+    );
+    assert_eq!(
+        rest,
+        "Los recursos irán a assets/art/. Edita el archivo para cambiar el estilo, el tamaño o la paleta.\n"
     );
     assert_eq!(load_guide(&path), Ok(ArtGuide::default()));
 

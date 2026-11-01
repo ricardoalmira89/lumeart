@@ -118,3 +118,7 @@ opt-level = 3
 opt-level = 3
 [profile.dev.package.visioncortex]
 opt-level = 3
+# QuickJS es C: sin optimizar, un fotograma pesado de anim.js pasa de su
+# límite de tiempo (700 ms) en máquinas lentas como las de la CI.
+[profile.dev.package.rquickjs-sys]
+opt-level = 3

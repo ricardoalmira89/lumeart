@@ -233,7 +233,9 @@ fn a_run_shows_up_step_by_step() {
     assert!(h.state().agent.running());
     h.get_by_label("una poción morada");
     h.get_by_label("Pensando…");
-    h.get_by_label("Vuelta 1 de 8");
+    // La pastilla y las casillas llegan con el primer evento del bucle, que
+    // viene del runtime (en la CI tarda más de dos fotogramas).
+    wait_until(&mut h, "la primera vuelta", |h| has(h, "Vuelta 1 de 8"));
     h.get_by_label("Vuelta 1: en curso");
     h.get_by_label("Vuelta 2: pendiente");
     assert!(!h.get_by_label("Detener").accesskit_node().is_disabled());

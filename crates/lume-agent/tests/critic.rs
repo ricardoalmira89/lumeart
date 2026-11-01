@@ -13,7 +13,9 @@ use lume_app::ports::{
     PreparedAgent, StopReason, Usage,
 };
 use lume_app::testing::{FakeProvider, MemoryStore};
-use lume_domain::{Canvas, Document, Origin};
+#[cfg(unix)]
+use lume_domain::Canvas;
+use lume_domain::{Document, Origin};
 
 const VERDICT: &str = "Hay un problema.\n```json\n{\"aprobado\": false, \"problemas\": [{\"gravedad\": \"alta\", \"zona\": [0, 0, 4, 4], \"problema\": \"falta el tapón\", \"arreglo\": \"añade un tapón marrón\"}, {\"gravedad\": \"baja\", \"problema\": \"el brillo es pequeño\"}]}\n```";
 

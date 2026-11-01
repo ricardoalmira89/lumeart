@@ -10,10 +10,13 @@ use lume_agent::ClaudeCodeRunner;
 use lume_agent::claude_code::{REMOVED_ENV, SYSTEM_FILE, StreamParser, missing_claude};
 use lume_app::AgentRunner;
 use lume_app::ports::{
-    AgentEvent, AgentLimits, AgentTask, Attachment, CancellationToken, ContentPart, EventSink,
-    PortError, RunEnd,
+    AgentEvent, AgentLimits, AgentTask, CancellationToken, ContentPart, EventSink, PortError,
+    RunEnd,
 };
 use lume_app::testing::FakeTools;
+// Solo lo usan los tests de Unix (los que lanzan un `claude` de mentira).
+#[cfg(unix)]
+use lume_app::ports::Attachment;
 
 const SETA: &str = include_str!("fixtures/claude_code/seta.stream.jsonl");
 
