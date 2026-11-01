@@ -29,7 +29,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           ref: ${{ env.TAG }}
-      - uses: dtolnay/rust-toolchain@stable
+      - uses: dtolnay/rust-toolchain@1.95.0
       - name: Librerías del sistema
         run: |
           sudo apt-get update
@@ -65,7 +65,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           ref: ${{ env.TAG }}
-      - uses: dtolnay/rust-toolchain@stable
+      - uses: dtolnay/rust-toolchain@1.95.0
       - uses: Swatinem/rust-cache@v2
       - name: Compilar
         run: cargo build --release --locked -p lumeart
@@ -96,7 +96,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           ref: ${{ env.TAG }}
-      - uses: dtolnay/rust-toolchain@stable
+      - uses: dtolnay/rust-toolchain@1.95.0
         with:
           targets: ${{ matrix.target }}
       - uses: Swatinem/rust-cache@v2

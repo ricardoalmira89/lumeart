@@ -5,8 +5,8 @@ quien usa LumeArt; esto, para quien lo desarrolla.
 
 ## Compilar y probar
 
-1. **Rust** estable: <https://rustup.rs> (la versión está en
-   `rust-toolchain.toml`).
+1. **Rust** 1.95.0 (<https://rustup.rs>; `rust-toolchain.toml` lo fija y
+   rustup lo instala solo al compilar aquí).
 2. En Linux, para la ventana: las librerías de desarrollo de
    X11/Wayland/OpenGL de tu distribución (en Debian/Ubuntu:
    `libxkbcommon-dev libwayland-dev libxrandr-dev libxi-dev libgl1-mesa-dev`).

@@ -21,7 +21,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: dtolnay/rust-toolchain@stable
+      - uses: dtolnay/rust-toolchain@1.95.0
         with:
           components: rustfmt, clippy
       # La ventana (eframe) necesita estas librerías para compilar en Linux.
@@ -44,7 +44,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
-      - uses: dtolnay/rust-toolchain@stable
+      - uses: dtolnay/rust-toolchain@1.95.0
       - name: Librerías del sistema
         if: runner.os == 'Linux'
         run: |
@@ -56,7 +56,7 @@ jobs:
       - name: Compilar
         run: cargo build --workspace --release --locked
       - name: Probar
-        run: cargo test --workspace --locked
+        run: cargo test --workspace --locked --no-fail-fast
       - name: Subir el ejecutable
         uses: actions/upload-artifact@v4
         with:

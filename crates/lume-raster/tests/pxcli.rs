@@ -99,6 +99,12 @@ fn grid_markup_is_pxclis() {
 fn every_case_looks_like_chrome() {
     let mut report = Vec::new();
     for name in case_names() {
+        // Los casos con texto se pintaron con Chrome en Linux y sus fuentes
+        // (Georgia, Lato, DejaVu): en otro sistema salen otras fuentes y la
+        // comparación no dice nada del rasterizado.
+        if name.starts_with("texto") && !cfg!(target_os = "linux") {
+            continue;
+        }
         let (ours, chrome) = case(&name);
         assert_eq!(
             (ours.width, ours.height),

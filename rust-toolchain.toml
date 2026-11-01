@@ -1,3 +1,5 @@
 [toolchain]
-channel = "stable"
+# Versión fija: la misma en local y en la CI, para que una versión nueva de
+# Rust (con avisos nuevos de Clippy) no rompa la CI sin cambiar nada.
+channel = "1.95.0"
 components = ["rustfmt", "clippy"]

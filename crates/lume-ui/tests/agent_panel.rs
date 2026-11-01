@@ -473,7 +473,9 @@ fn loop_boxes_follow_the_turns() {
     });
     let mut h = app(&w, backend, Screen::Studio);
     send(&mut h, "una poción");
-    h.get_by_label("Bucle de refinado");
+    // El primer evento del bucle llega del runtime: puede tardar unos
+    // fotogramas (en la CI, más).
+    wait_until(&mut h, "la caja del bucle", |h| has(h, "Bucle de refinado"));
     h.get_by_label("vuelta 1 de 3");
     h.get_by_label("Vuelta 1: en curso");
     h.get_by_label("Vuelta 2: pendiente");
@@ -607,9 +609,12 @@ fn messages_while_drawing_go_to_the_next_turn() {
     let mut h = app(&w, backend, Screen::Studio);
     send(&mut h, "una poción");
     assert!(h.state().agent.running());
+    // Que llegue antes la caja del bucle: si aparece mientras se escribe el
+    // segundo mensaje, el panel se mueve y el clic en «Enviar» falla.
+    wait_until(&mut h, "la caja del bucle", |h| has(h, "Bucle de refinado"));
     send(&mut h, "con un brillo arriba");
     assert!(h.state().agent.running(), "no se detiene");
-    h.get_by_label("con un brillo arriba");
+    wait_until(&mut h, "el mensaje", |h| has(h, "con un brillo arriba"));
     h.get_by_label("para la próxima vuelta");
 
     gate.add_permits(4);
