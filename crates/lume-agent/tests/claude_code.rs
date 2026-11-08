@@ -779,3 +779,35 @@ echo '{"type":"result","subtype":"success","is_error":false,"num_turns":1,"resul
     );
     assert_eq!(summary.unwrap().loops, None);
 }
+
+/// Con «Acceso completo» (Ajustes › Claude Code), el artista va sin lista de
+/// herramientas ni permisos que pedir, y sus instrucciones lo dicen; el
+/// crítico sigue solo con `Read`.
+#[test]
+fn full_access_lifts_the_limits_of_the_artist_only() {
+    let root = tempfile::tempdir().unwrap();
+    let r = runner(Some("/usr/bin/claude".into()), root.path()).with_full_access(true);
+    let args = r.args(&task(4));
+    let expected: Vec<&str> = vec![
+        "-p",
+        "--output-format",
+        "stream-json",
+        "--verbose",
+        "--include-partial-messages",
+        "--permission-mode",
+        "bypassPermissions",
+        "--strict-mcp-config",
+        "--setting-sources",
+        "project,local",
+        "--append-system-prompt-file",
+        SYSTEM_FILE,
+        "--model",
+        "sonnet",
+    ];
+    assert_eq!(args, expected);
+
+    let critic = r.clone().as_critic().args(&task(4));
+    assert!(!critic.iter().any(|a| a == "bypassPermissions"));
+    let tools = critic.iter().position(|a| a == "--tools").unwrap();
+    assert_eq!(critic[tools + 1], "Read");
+}

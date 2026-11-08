@@ -106,6 +106,9 @@ pub struct ClaudeCodeRunner {
     pub role: AgentRole,
     /// Con el plugin oficial, que lleva el bucle (solo el artista).
     pub ralph: Option<RalphPlugin>,
+    /// Sin restricciones (solo el artista): todas las herramientas de
+    /// Claude Code y ningún permiso que pedir.
+    pub full_access: bool,
 }
 
 impl ClaudeCodeRunner {
@@ -122,7 +125,21 @@ impl ClaudeCodeRunner {
             work_dir,
             role: AgentRole::Artist,
             ralph: None,
+            full_access: false,
         }
+    }
+
+    /// Con acceso completo (o no): el artista puede usar cualquier
+    /// herramienta, comando o archivo sin pedir permiso. El crítico sigue
+    /// solo con `Read`.
+    pub fn with_full_access(mut self, on: bool) -> Self {
+        self.full_access = on;
+        self
+    }
+
+    /// Si esta ejecución va sin restricciones.
+    fn unrestricted(&self) -> bool {
+        self.full_access && self.role == AgentRole::Artist
     }
 
     /// Con el plugin oficial `ralph-loop` llevando el bucle.
@@ -180,18 +197,24 @@ impl ClaudeCodeRunner {
         if self.role == AgentRole::Artist && task.vector.is_some() {
             allowed.push("Edit(./dibujo.js)");
         }
+        let limits: Vec<&str> = if self.unrestricted() {
+            // Acceso completo: todas sus herramientas y sin pedir permiso.
+            vec!["--permission-mode", "bypassPermissions"]
+        } else {
+            ["--tools", tools, "--allowedTools"]
+                .into_iter()
+                .chain(allowed.iter().copied())
+                .collect()
+        };
         let mut args: Vec<String> = [
             "-p",
             "--output-format",
             "stream-json",
             "--verbose",
             "--include-partial-messages",
-            "--tools",
-            tools,
-            "--allowedTools",
         ]
         .into_iter()
-        .chain(allowed.iter().copied())
+        .chain(limits)
         .chain([
             "--strict-mcp-config",
             "--setting-sources",
@@ -268,10 +291,13 @@ impl ClaudeCodeRunner {
     ) -> Result<String, PortError> {
         let io = |e: std::io::Error| PortError::Io(format!("{}: {e}", dir.display()));
         std::fs::create_dir_all(dir).map_err(io)?;
-        let system = match self.role {
+        let mut system = match self.role {
             AgentRole::Artist => prompts::claude_code_system(task),
             AgentRole::Critic => prompts::critic_system(),
         };
+        if self.unrestricted() {
+            system.push_str(prompts::FULL_ACCESS_NOTE);
+        }
         std::fs::write(dir.join(SYSTEM_FILE), system).map_err(io)?;
         if let Some(png) = drawing {
             std::fs::write(dir.join(DRAWING_FILE), png).map_err(io)?;

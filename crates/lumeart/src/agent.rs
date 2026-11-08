@@ -80,7 +80,8 @@ impl WindowAgent {
                     self.lumeart.clone(),
                     self.session_file.clone(),
                     self.work_dir.clone(),
-                );
+                )
+                .with_full_access(settings.claude_code_full_access);
                 let runner = match (&self.ralph, critic) {
                     (_, true) => runner.as_critic(),
                     (Some(plugin), false) => runner.with_ralph(plugin.clone()),

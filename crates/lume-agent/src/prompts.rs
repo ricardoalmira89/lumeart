@@ -171,6 +171,10 @@ pub fn has_canvas(task: &AgentTask) -> bool {
         .any(|a| a.label == CANVAS_ATTACHMENT)
 }
 
+/// Se añade a las instrucciones de Claude Code cuando tiene acceso completo
+/// (Ajustes › Claude Code): las de siempre dicen que solo use `lumeart`.
+pub const FULL_ACCESS_NOTE: &str = "\n\n## Acceso completo\nEl usuario te ha dado acceso completo: puedes usar cualquier herramienta, programa o archivo del sistema sin pedir permiso, además de lumeart. Tu carpeta de trabajo sigue siendo la actual y el dibujo sigue siendo el de este encargo; úsalo para lo que lumeart no cubra (buscar un archivo, mirar una imagen de fuera, procesar algo con otra herramienta).\n";
+
 /// Instrucciones de sistema para Claude Code (`claude -p`), que dibuja con
 /// `lumeart batch` y revisa con `lumeart export` y `Read`.
 pub fn claude_code_system(task: &AgentTask) -> String {

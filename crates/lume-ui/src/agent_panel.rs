@@ -371,7 +371,7 @@ impl AgentPanel {
                     if let Some(original) = tool.output.clone().filter(|t| blocked(t)) {
                         tool.result = Some("bloqueado".into());
                         tool.output = Some(format!(
-                            "Claude Code no deja ejecutar esto: en la terminal el agente solo puede usar lumeart (es una protección de LumeArt, nadie tiene que aprobar nada). El agente sigue y lo hace de otra forma.\n\n{original}"
+                            "Claude Code no deja ejecutar esto: en la terminal el agente solo puede usar lumeart (es una protección de LumeArt, nadie tiene que aprobar nada). El agente sigue y lo hace de otra forma. Para quitar el límite, activa «Acceso completo» en Ajustes › Claude Code.\n\n{original}"
                         ));
                     }
                 }

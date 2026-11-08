@@ -154,6 +154,10 @@ pub struct Settings {
     pub provider: ProviderKind,
     /// Modelo para `claude -p --model` (vacío: el que use Claude Code).
     pub claude_code_model: String,
+    /// Claude Code sin restricciones: cualquier herramienta, comando o
+    /// archivo, sin pedir permiso (`--permission-mode bypassPermissions`).
+    /// Apagado, solo puede usar `lumeart` y sus archivos.
+    pub claude_code_full_access: bool,
     pub anthropic_model: String,
     pub openai_model: String,
     pub local_url: String,
@@ -175,6 +179,7 @@ impl Default for Settings {
         Self {
             provider: ProviderKind::ClaudeCode,
             claude_code_model: String::new(),
+            claude_code_full_access: false,
             anthropic_model: DEFAULT_ANTHROPIC_MODEL.into(),
             openai_model: DEFAULT_OPENAI_MODEL.into(),
             local_url: DEFAULT_LOCAL_URL.into(),

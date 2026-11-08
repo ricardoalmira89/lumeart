@@ -72,6 +72,11 @@ pub fn settings_from_toml(text: &str) -> Result<Settings, String> {
             .and_then(|s| ProviderKind::parse(&s))
             .unwrap_or(d.provider),
         claude_code_model: string("models", "claude_code").unwrap_or(d.claude_code_model),
+        claude_code_full_access: boolean(
+            "agent",
+            "claude_code_full_access",
+            d.claude_code_full_access,
+        ),
         anthropic_model: string("models", "anthropic").unwrap_or(d.anthropic_model),
         openai_model: string("models", "openai").unwrap_or(d.openai_model),
         local_url: string("models", "local_url").unwrap_or(d.local_url),
@@ -102,6 +107,9 @@ pub fn settings_to_toml(s: &Settings) -> String {
 [agent]
 # claude-code | anthropic | openai | local
 provider = {provider}
+# Claude Code sin restricciones: cualquier comando, archivo o herramienta, sin
+# pedir permiso. Apagado, solo puede usar lumeart y los archivos de su encargo.
+claude_code_full_access = {full_access}
 
 [models]
 # Vacío: el modelo que tenga configurado Claude Code.
@@ -126,6 +134,7 @@ draw_speed = {draw_speed}
 ",
         provider = q(s.provider.as_str()),
         claude_code = q(&s.claude_code_model),
+        full_access = s.claude_code_full_access,
         anthropic = q(&s.anthropic_model),
         openai = q(&s.openai_model),
         local_url = q(&s.local_url),
@@ -146,6 +155,7 @@ mod tests {
         Settings {
             provider: ProviderKind::Anthropic,
             claude_code_model: "haiku".into(),
+            claude_code_full_access: true,
             anthropic_model: "claude-sonnet-5-5".into(),
             openai_model: "gpt-5-mini".into(),
             local_url: "http://127.0.0.1:1234/v1".into(),

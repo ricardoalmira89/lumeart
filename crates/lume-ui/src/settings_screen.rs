@@ -352,10 +352,15 @@ impl SettingsScreen {
             None,
             false,
         );
-        ui.label(
-            RichText::new("Solo puede usar los comandos de lumeart y leer imágenes del dibujo.")
-                .size(12.0)
-                .color(theme::TEXT_3),
+        switch_row(
+            ui,
+            "Acceso completo",
+            Some(if next.claude_code_full_access {
+                "Puede usar cualquier comando, archivo o herramienta de tu equipo sin pedir permiso. Úsalo solo si confías en lo que le pides."
+            } else {
+                "Solo puede usar los comandos de lumeart y los archivos de su encargo."
+            }),
+            &mut next.claude_code_full_access,
         );
         if !default
             && ui
