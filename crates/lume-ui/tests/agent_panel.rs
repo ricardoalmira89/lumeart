@@ -692,6 +692,40 @@ fn pasting_an_image_attaches_it() {
     );
 }
 
+/// Un mensaje posterior sin imágenes sigue llevando al agente las
+/// referencias de antes de la conversación («los lanzacohetes como en la
+/// referencia»).
+#[test]
+fn later_messages_keep_the_earlier_references() {
+    let w = world_with(Settings {
+        max_turns: 1,
+        ..Settings::default()
+    });
+    let (recorder, mut h) = recorder_app(&w);
+    let rgba = [255, 0, 0, 255];
+    let image = Arc::new(egui::ColorImage::from_rgba_unmultiplied([1, 1], &rgba));
+    h.get_by_label("Mensaje para el agente").focus();
+    h.step();
+    h.event(egui::Event::PasteImage(image));
+    h.run_steps(2);
+    send(&mut h, "una nave como esta");
+    wait_until(&mut h, "el primer encargo terminado", |h| {
+        recorder.tasks.lock().unwrap().len() == 1 && !h.state().agent.running()
+    });
+
+    send(&mut h, "los lanzacohetes como en la referencia");
+    wait_until(&mut h, "el segundo encargo", |_| {
+        recorder.tasks.lock().unwrap().len() == 2
+    });
+    let tasks = recorder.tasks.lock().unwrap();
+    let labels: Vec<&str> = tasks[1]
+        .attachments
+        .iter()
+        .map(|a| a.label.as_str())
+        .collect();
+    assert_eq!(labels, ["imagen pegada"]);
+}
+
 /// La redacción se agranda arrastrando la línea que la separa de la
 /// conversación (sin dejarla sin sitio) y vuelve a su alto con doble clic.
 #[test]

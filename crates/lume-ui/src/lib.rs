@@ -1134,6 +1134,8 @@ impl StudioApp {
         continuing: bool,
     ) {
         self.shell.agent.started(shown, &attachments);
+        // El agente recibe también las referencias de mensajes anteriores.
+        let attachments = self.shell.agent.remember_references(&attachments);
         let settings = self.controller.settings.clone();
         // Animar un dibujo vectorial es cambiar su esqueleto en dibujo.js.
         let vector_anim = self.shell.mode == Mode::Animation

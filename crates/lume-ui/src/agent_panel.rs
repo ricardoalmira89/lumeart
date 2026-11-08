@@ -205,6 +205,10 @@ pub struct AgentPanel {
     pub draft: String,
     /// Imágenes de referencia para el próximo envío.
     pub attachments: Vec<Attachment>,
+    /// Las imágenes de referencia ya enviadas en esta conversación, en
+    /// orden. Cada ejecución las recibe todas: un mensaje posterior («los
+    /// lanzacohetes como en la referencia») sigue teniéndolas.
+    pub references: Vec<Attachment>,
     /// «Seguir con este dibujo»: el agente trabaja sobre lo que hay.
     pub continue_drawing: bool,
     /// Pasos de la ejecución en marcha (llamadas al modelo vistas).
@@ -245,6 +249,24 @@ impl AgentPanel {
             text: text.to_string(),
             attachments: vec!["para la próxima vuelta".into()],
         });
+    }
+
+    /// Apunta las imágenes de un envío entre las de la conversación (sin
+    /// repetir las de mensajes anteriores) y devuelve todas, para la
+    /// ejecución.
+    pub fn remember_references(&mut self, sent: &[Attachment]) -> Vec<Attachment> {
+        // Solo se comparan con las de mensajes anteriores: las del mismo
+        // envío van todas, como las adjuntó el usuario.
+        let earlier = self.references.len();
+        for attachment in sent {
+            if !self.references[..earlier]
+                .iter()
+                .any(|r| r.data == attachment.data)
+            {
+                self.references.push(attachment.clone());
+            }
+        }
+        self.references.clone()
     }
 
     /// Empieza una ejecución: apunta el mensaje del usuario.
@@ -1668,6 +1690,25 @@ fn review(ui: &mut egui::Ui, texture: Option<&TextureHandle>) {
 mod tests {
     use super::*;
     use lume_app::ports::Usage;
+
+    /// Las referencias de mensajes anteriores llegan también a los
+    /// siguientes, en orden y sin repetirse.
+    #[test]
+    fn references_stay_for_the_whole_conversation() {
+        let image = |label: &str, byte: u8| Attachment {
+            label: label.into(),
+            media_type: "image/png".into(),
+            data: vec![byte; 4],
+        };
+        let mut panel = AgentPanel::default();
+        let first = panel.remember_references(&[image("nave.png", 1)]);
+        assert_eq!(first, [image("nave.png", 1)]);
+        // Un mensaje sin imágenes sigue llevando la de antes.
+        assert_eq!(panel.remember_references(&[]), [image("nave.png", 1)]);
+        // Una nueva se añade detrás; la misma otra vez no se repite.
+        let all = panel.remember_references(&[image("cohete.png", 2), image("otra vez.png", 1)]);
+        assert_eq!(all, [image("nave.png", 1), image("cohete.png", 2)]);
+    }
 
     #[test]
     fn draw_calls_become_tool_blocks_with_their_commands() {
